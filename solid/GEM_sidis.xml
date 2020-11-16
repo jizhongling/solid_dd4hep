@@ -1,0 +1,61 @@
+<lccdd>
+  <detectors>
+    <detector id="2" name="GEMTracker_SIDIS" vis="RedVis" type="GaplessGEMTrackerDisc" readout="GEMTrackerHits" >
+      <module name="Module_A" id="1" inner_r="50.0*cm"  outer_r="118.0*cm" segments="30">
+        <slice name="drift_cathode" material="Kapton" thickness="0.100*mm"/>
+        <slice name="drift_gas1" material="GEMGas" thickness="3.0*mm"/>
+        <slice name="gem_foil_1" material="Kapton" thickness="0.100*mm"/>
+        <slice name="drift_gas2" material="GEMGas" thickness="2.0*mm"/>
+        <slice name="gem_foil_2" material="Kapton" thickness="0.100*mm"/>
+        <slice name="drift_gas3" material="GEMGas" thickness="2.0*mm"/>
+        <slice name="gem_foil_3" material="Kapton" thickness="0.100*mm"/>
+        <slice name="drift_gas4" material="GEMGas" thickness="2.0*mm"/>
+        <slice name="u_readout_plane" material="Kapton" thickness="0.200*mm" sensitive="true"/>
+        <slice name="v_readout_plane" material="Kapton" thickness="0.200*mm" sensitive="true"/>
+      </module>
+      <module name="Module_B" id="2" inner_r="61.0*cm"  outer_r="140.0*cm" segments="30">
+        <slice name="drift_cathode" material="Kapton" thickness="0.100*mm"/>
+        <slice name="drift_gas1" material="GEMGas" thickness="3.0*mm"/>
+        <slice name="gem_foil_1" material="Kapton" thickness="0.100*mm"/>
+        <slice name="drift_gas2" material="GEMGas" thickness="2.0*mm"/>
+        <slice name="gem_foil_2" material="Kapton" thickness="0.100*mm"/>
+        <slice name="drift_gas3" material="GEMGas" thickness="2.0*mm"/>
+        <slice name="gem_foil_3" material="Kapton" thickness="0.100*mm"/>
+        <slice name="drift_gas4" material="GEMGas" thickness="2.0*mm"/>
+        <slice name="u_readout_plane" material="Kapton" thickness="0.200*mm" sensitive="true"/>
+        <slice name="v_readout_plane" material="Kapton" thickness="0.200*mm" sensitive="true"/>
+      </module>
+      <module name="Module_C" id="2" inner_r="110.0*cm"  outer_r="200.0*cm" segments="30">
+        <slice name="drift_cathode" material="Kapton" thickness="0.100*mm"/>
+        <slice name="drift_gas1" material="GEMGas" thickness="3.0*mm"/>
+        <slice name="gem_foil_1" material="Kapton" thickness="0.100*mm"/>
+        <slice name="drift_gas2" material="GEMGas" thickness="2.0*mm"/>
+        <slice name="gem_foil_2" material="Kapton" thickness="0.100*mm"/>
+        <slice name="drift_gas3" material="GEMGas" thickness="2.0*mm"/>
+        <slice name="gem_foil_3" material="Kapton" thickness="0.100*mm"/>
+        <slice name="drift_gas4" material="GEMGas" thickness="2.0*mm"/>
+        <slice name="u_readout_plane" material="Kapton" thickness="0.200*mm" sensitive="true"/>
+        <slice name="v_readout_plane" material="Kapton" thickness="0.200*mm" sensitive="true"/>
+      </module>
+      <layer id="1" z="-175*cm" inner_r="36*cm"  outer_r="87.0*cm"  phi0_offset="0.0*deg" Nmodules="30">
+        <module name="Module_A"/>
+      </layer>
+      <layer id="2" z="-150*cm" inner_r="21*cm"  outer_r="98.0*cm"  phi0_offset="0.0*deg" Nmodules="20">
+        <module name="Module_B"/>
+      </layer>
+      <layer id="3" z="-119*cm" inner_r="29*cm"  outer_r="112.0*cm" phi0_offset="0.0*deg" Nmodules="16">
+        <module name="Module_C"/>
+      </layer>
+      <layer id="4" z="-80*cm" inner_r="32*cm"  outer_r="135.0*cm" phi0_offset="0.0*deg" Nmodules="18">
+        <module name="Module_C"/>
+      </layer>
+      <layer id="5" z="5*cm" inner_r="42*cm"  outer_r="100.0*cm" phi0_offset="0.0*deg" Nmodules="28">
+        <module name="Module_B"/>
+      </layer>
+      <layer id="6" z="92*cm" inner_r="55*cm"  outer_r="123.0*cm" phi0_offset="0.0*deg" Nmodules="24">
+        <module name="Module_B"/>
+        <module name="Module_C"/>
+      </layer>
+    </detector>
+  </detectors>
+</lccdd>

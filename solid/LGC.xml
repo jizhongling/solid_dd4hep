@@ -1,0 +1,21 @@
+<lccdd>
+  <detectors>
+    <detector id="7" name="LightGasCherenkov" type="ThresholdGasCherenkov" readout="LightGasCherenkovHits" vis="RedVis" material="N2cherenkov">
+      <placement  x="0*cm" y="0*cm" z="260*cm" />
+      <dimensions rmin="10*cm" rmax1="80*cm" rmax2="120*cm" zmin="20*cm"  zmax="120*cm"/>
+      <mirror id="1"> 
+        <placement x="0*cm" y="129.9*cm" z="30.3125*cm"/>
+        <rotation x="25.0*degree" y="0" z="0"/>
+      </mirror>
+      <mirror id="2">
+        <placement x="0*cm" y="211.411*cm" z="50.6678*cm"/>
+        <rotation x="2.0*degree" y="0" z="0"/>
+      </mirror>
+      <mirror id="3" >
+        <comment>Mirror 3 is the combination of winston cone and PMT assembly</comment>        
+        <placement x="0*cm" y="255*cm" z="-40*cm"/>
+        <rotation x="55.0*degree" y="0" z="0"/>
+      </mirror>
+    </detector>
+  </detectors>
+</lccdd>

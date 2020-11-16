@@ -1,0 +1,44 @@
+
+#/gun/position 0 0 200 cm
+#/gun/particle e-
+#/gun/direction 0 0.2  1
+#/gun/energy 5 GeV
+#/gun/number 1
+#
+#/gps/direction 0 0.2 1.0 
+#/run/beamOn 1
+#
+#/control/verbose 2
+#/run/initialize
+#/run/beamOn 1
+#
+/run/beamOn 1
+
+/gps/verbose 2
+/gps/particle e-
+/gps/number 1
+
+/gps/ene/type Gauss
+/gps/ene/mono  1.0 GeV
+/gps/ene/sigma 0.1 GeV
+
+/gps/pos/type Volume
+/gps/pos/shape Cylinder
+/gps/pos/centre 0.0 0.0 -300.0 cm
+/gps/pos/radius 0.01 cm
+/gps/pos/halfz  0.01 cm
+/gps/position 0 0 -300.0 cm
+
+#/gps/ang/type iso
+
+/gps/ang/type iso
+/gps/ang/mintheta 178 degree
+/gps/ang/maxtheta 160 degree
+#/gps/ang/minphi 265 degree
+#/gps/ang/maxphi 275 degree
+#
+/run/beamOn 1
+
+#/control/execute macro/vis.mac
+#
+#/run/beamOn 500

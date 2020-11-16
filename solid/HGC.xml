@@ -1,0 +1,17 @@
+<lccdd>
+  <detectors>
+    <detector id="8" name="HeavyGasCherenkov" type="HeavyGasCherenkov" readout="HeavyGasCherenkovHits" vis="BlueVis" material="N2cherenkov">
+      <placement  x="0*cm" y="0*cm" z="370*cm" />
+      <dimensions rmin1="80*cm" rmin2="94*cm" rmax1="265*cm" rmax2="265*cm" zmin="306*cm"  zmax="406*cm"/>
+      <mirror id="1"> 
+        <placement x="0*cm" y="129.9*cm" z="30.3125*cm"/>
+        <rotation x="25.0*degree" y="0" z="0"/>
+      </mirror>
+      <mirror id="3" >
+        <comment>Mirror 3 is the combination of winston cone and PMT assembly</comment>        
+        <placement x="0*cm" y="255*cm" z="-40*cm"/>
+        <rotation x="55.0*degree" y="0" z="0"/>
+      </mirror>
+    </detector>
+  </detectors>
+</lccdd>
