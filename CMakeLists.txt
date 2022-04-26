@@ -1,28 +1,55 @@
-cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 
-#set(CMAKE_PREFIX_PATH $ENV{HOME}/lib CMAKE_PREFIX_PATH)
-#find_package(Acts REQUIRED COMPONENTS Core IdentificationPlugin TGeoPlugin DD4hepPlugin PATHS /home/whit/lib/cmake NO_DEFAULT_PATH)
+# CMP0074: find_package() uses <PackageName>_ROOT variables
+cmake_policy(SET CMP0074 NEW)
+
+PROJECT(solid
+  VERSION 0.0.1
+  LANGUAGES CXX
+  DESCRIPTION "SoLID in ATHENA framework"
+  )
+
+set(CMAKE_CXX_STANDARD 17)
+find_package( DD4hep REQUIRED COMPONENTS DDCore DDG4)
+
 find_package(Acts REQUIRED COMPONENTS Core PluginIdentification PluginTGeo PluginDD4hep )
 
-#-----------------------------------------------------------------------------------
-set(a_lib_name solid)
-dd4hep_configure_output()
-#dd4hep_package (${a_lib_name} MAJOR 0 MINOR 0 PATCH 1
-#    USES         [ROOT   REQUIRED COMPONENTS Geom GenVector] 
-#                 [DD4hep REQUIRED COMPONENTS DDCore DDRec]
-#    OPTIONAL     XERCESC
-#    INCLUDE_DIRS include
-#    )
+find_package(fmt)
+#find_library(FMT_LIBRARY fmt)
 
-dd4hep_add_plugin(${a_lib_name} SOURCES src/*.cpp
-        USES ActsCore ActsPluginDD4hep
+
+#-----------------------------------------------------------------------------------
+set(a_lib_name athena)
+
+dd4hep_configure_output()
+
+dd4hep_add_plugin(${a_lib_name} SOURCES 
+  src/EMCalorimeterSOLID_geo.cpp
+  src/FieldMapBrBz.cpp
+  src/GEMTrackerDiscSOLID_geo.cpp
+  src/NH3Target_geo.cpp
+  src/StandInGeometrySOLID_geo.cpp
+  USES ActsCore ActsPluginDD4hep
   )
 target_link_libraries(${a_lib_name}
-  PUBLIC DD4hep::DDCore  DD4hep::DDRec
+  PUBLIC DD4hep::DDCore  DD4hep::DDRec fmt::fmt
   )
 
 #-----------------------------------------------------------------------------------
+# Install the detector description files.
 install(DIRECTORY compact/
     DESTINATION share/${PROJECT_NAME}/${a_lib_name}
     FILES_MATCHING PATTERN "*.xml"
     )
+install(DIRECTORY compact/
+    DESTINATION share/${PROJECT_NAME}/compact
+    FILES_MATCHING PATTERN "*.xml"
+    )
+install(FILES solid_sidis.xml solid_pvdis.xml
+    DESTINATION share/${PROJECT_NAME}/
+    )
+#-----------------------------------------------------------------------------------
+# Install the detector calibration files.
+# install(DIRECTORY calibrations/
+#     DESTINATION share/${PROJECT_NAME}/calibrations
+#     )

@@ -3,13 +3,13 @@
         author="W.Armstrong,C.Peng"
         url=""
         status="development"
-        version="$Id: compact.xml v1.0 2016-12-21$">
+        version="$Id: solid.xml v1.0 2016-12-21$">
     <comment>SoLID detector</comment>
   </info>
 
   <includes>
-    <gdmlFile  ref="solid/elements.xml" />
-    <gdmlFile  ref="solid/materials.xml" />
+    <gdmlFile  ref="compact/elements.xml" />
+    <gdmlFile  ref="compact/materials.xml" />
   </includes>
 
   <define>
@@ -127,27 +127,27 @@
     <!-- GEM Tracker
     ids = 2
     -->
-    <include ref="solid/GEM_sidis.xml"/>
+    <include ref="compact/GEM_sidis.xml"/>
 
     <!-- Large Angle Electromagnetic Calorimeter 
     ids = 3,4  => PS,EC
     -->
-    <include ref="solid/LAEC.xml"/>
+    <include ref="compact/LAEC.xml"/>
 
     <!-- Forward Angle Electromagnetic Calorimeter 
     ids = 5,6  => PS,EC
     -->
-    <include ref="solid/FAEC.xml"/>
+    <include ref="compact/FAEC.xml"/>
 
     <!-- Light Gas Cherenkov
     id = 7 
     -->
-    <include ref="solid/LGC.xml"/>
+    <include ref="compact/LGC.xml"/>
 
     <!-- Heavy Gas Cherenkov
     id = 8 
     -->
-    <include ref="solid/HGC.xml"/>
+    <include ref="compact/HGC.xml"/>
 
 
   </detectors>
