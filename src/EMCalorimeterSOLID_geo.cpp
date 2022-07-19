@@ -86,13 +86,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     double len_z = layering.totalThickness();
 
     double module_gap  = 10.0*2.54*0.001; // 10 mil gap
-    double side_length = rmod*2.0/std::sqrt(3.0)-module_gap;
+    double side_length = rmod*2.0/std::sqrt(3.0) - module_gap;
 
     // detector volume
     DetElement sdet(det_name, det_id);
     Volume motherVol = desc.pickMotherVolume(sdet);
-    Tube tube(rmin - 2.0*rmod, rmax + 2.0*rmod, len_z/2.);
-    Volume envelope(det_name, tube, air);
+    // Tube tube(rmin - 2.0*rmod, rmax + 2.0*rmod, len_z/2.);
+    // Volume envelope(det_name, tube, air);
+    Assembly envelope(det_name);
     PlacedVolume env_phv = motherVol.placeVolume(envelope, Position(0., 0., det_z0 + len_z/2.));
 
     env_phv.addPhysVolID("system", det_id);
@@ -103,6 +104,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // a modular volume
     PolyhedraRegular m_hex(6, 0., side_length, len_z);
     Volume mod_vol("module", m_hex, air);
+    mod_vol.setVisAttributes(desc.visAttributes(x_det.visStr()));
     DetElement mod_DE("module0", 0);
 
     // layer start point
@@ -137,7 +139,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                     s_vol.setSensitiveDetector(sens);
                 }
                 slice.setAttributes(desc, s_vol, x_slice.regionStr(), x_slice.limitsStr(), "InvisibleNoDaughters");
-                s_vol.setVisAttributes(desc.invisible());
+                // s_vol.setVisAttributes(desc.invisible());
 
                 // Slice placement.
                 PlacedVolume slice_phv = l_vol.placeVolume(s_vol, Position(0, 0, s_pos_z + s_thick/2));
@@ -152,7 +154,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
             // Set region, limitset, and vis of layer.
             layer_DE.setAttributes(desc, l_vol, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
-            l_vol.setVisAttributes(desc.invisible());
+            // l_vol.setVisAttributes(desc.invisible());
 
             PlacedVolume layer_phv = mod_vol.placeVolume(l_vol, l_pos);
             layer_phv.addPhysVolID("layer", l_num);
@@ -180,6 +182,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     int nmod = 0;
     for (auto &p : res) {
         PlacedVolume pv = envelope.placeVolume(mod_vol, Position(p.x(), p.y(), 0.));
+        // cout << p.x() << ", " << p.y() << endl;
         pv.addPhysVolID("system", det_id);
         pv.addPhysVolID("module", nmod+1);
         auto amod = (nmod == 0 ? mod_DE : mod_DE.clone("module" + std::to_string(nmod+1), nmod+1));
@@ -189,7 +192,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     }
 
     // Set envelope volume attributes.
-    envelope.setAttributes(desc, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
+    envelope.setAttributes(desc, x_det.regionStr(), x_det.limitsStr(), "InvisibleWithDaughters");
     return sdet;
 }
 
