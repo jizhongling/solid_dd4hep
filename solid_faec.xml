@@ -135,7 +135,7 @@
     <!-- Forward Angle Electromagnetic Calorimeter 
     ids = 5,6  => PS,EC
     -->
-    <include ref="compact/FAEC.xml"/>
+    <include ref="compact/FAEC_shower.xml"/>
 
     <!-- Light Gas Cherenkov
     id = 7 
