@@ -19,7 +19,7 @@ find_package(fmt)
 
 
 #-----------------------------------------------------------------------------------
-set(a_lib_name athena)
+set(a_lib_name solid_dd4hep)
 
 dd4hep_configure_output()
 
