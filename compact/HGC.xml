@@ -1,6 +1,6 @@
 <lccdd>
   <detectors>
-    <detector id="8" name="HeavyGasCherenkov" type="HeavyGasCherenkov" readout="HeavyGasCherenkovHits" vis="BlueVis" material="N2cherenkov">
+    <detector id="8" name="HeavyGasCherenkov" type="SoLID_HGC" readout="HeavyGasCherenkovHits" vis="BlueVis" material="N2cherenkov">
       <placement  x="0*cm" y="0*cm" z="370*cm" />
       <dimensions rmin1="80*cm" rmin2="94*cm" rmax1="265*cm" rmax2="265*cm" zmin="306*cm"  zmax="406*cm"/>
       <mirror id="1"> 

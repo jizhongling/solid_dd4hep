@@ -29,6 +29,8 @@ dd4hep_add_plugin(${a_lib_name} SOURCES
   src/GEMTrackerDiscSOLID_geo.cpp
   src/NH3Target_geo.cpp
   src/StandInGeometrySOLID_geo.cpp
+  src/HeavyGasCherenkov_geo.cpp
+  src/ThresholdGasCherenkov_geo.cpp
   USES ActsCore ActsPluginDD4hep
   )
 target_link_libraries(${a_lib_name}

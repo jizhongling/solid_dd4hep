@@ -1,6 +1,6 @@
 <lccdd>
   <detectors>
-    <detector id="7" name="LightGasCherenkov" type="ThresholdGasCherenkov" readout="LightGasCherenkovHits" vis="RedVis" material="N2cherenkov">
+    <detector id="7" name="LightGasCherenkov" type="SoLID_LGC" readout="LightGasCherenkovHits" vis="RedVis" material="N2cherenkov">
       <placement  x="0*cm" y="0*cm" z="260*cm" />
       <dimensions rmin="10*cm" rmax1="80*cm" rmax2="120*cm" zmin="20*cm"  zmax="120*cm"/>
       <mirror id="1"> 
