@@ -10,16 +10,14 @@ ml_shower:tagging_e :
   when: manual
   stage: benchmarks1
   script:
-    - python3 ECal/run_benchmark.py -t imcal_e -n 100000 
-      --particles "electron" --pmin 0.5 --pmax 10
+    - python3 ECal/run_benchmark.py -t imcal_e -n 100000 --particles "electron" --pmin 0.5 --pmax 10
 
 ml_shower:tagging_pi :
   extends: .rec_benchmark
   when: manual
   stage: benchmarks1
   script:
-    - python3 ECal/run_benchmark.py -t imcal_pi -n 100000 
-      --particles "pion-" --pmin 0.5 --pmax 10
+    - python3 ECal/run_benchmark.py -t imcal_pi -n 100000 --particles "pion-" --pmin 0.5 --pmax 10
 
 ml_shower:training:
   extends: .rec_benchmark
