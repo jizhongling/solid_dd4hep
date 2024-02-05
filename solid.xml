@@ -60,11 +60,6 @@
 
   <surfaces>
     <comment> For the values of "finish", model and type, see TGeoOpticalSurface.h !  </comment>
-    <opticalsurface name="MirrorOpticalSurface" finish="polished" model="glisur" type="dielectric_metal" value="0">
-      <property name="REFLECTIVITY" ref="REFLECTIVITY_mirror"/>
-      <property name="RINDEX"       coldim="2" values="1.034*eV  1.5   4.136*eV  1.5"/>
-      <!--<property name="EFFICIENCY"   ref="EFFICIENCY0x8b77240"/>-->
-    </opticalsurface>
     <opticalsurface name="PMTOpticalSurface" finish="polished" model="glisur" type="dielectric_dielectric" value="0">
       <property name="RINDEX"       coldim="2" values="1.034*eV  1.5   4.136*eV  1.5"/>
       <!--<property name="EFFICIENCY"   ref="EFFICIENCY0x8b77240"/>-->
@@ -77,11 +72,11 @@
   </surfaces>
 
 
+  <include ref="compact/fields.xml"/>
+
   <detectors>
     <include ref="compact/LAEC.xml"/>
     <include ref="compact/FAEC.xml"/>
-    <include ref="compact/LGC.xml"/>
-    <include ref="compact/HGC.xml"/>
   </detectors>
 
   <!--  Definition of the readout segmentation/definition  -->
@@ -119,17 +114,4 @@
       <id>system:6,sector:11,mirror:4,module:10,x:32:-16,y:-16</id>
     </readout>
   </readouts>
-
-  <fields>
-    <field name="CLEO_field" type="FieldMapBrBz" field_type="magnetic"
-           field_map="fieldmaps/solenoid_CLEOv8.dat" 
-           url="https://jlabsvn.jlab.org/svnroot/solid/solid_gemc2/field/solenoid_CLEOv9.dat">
-      <dimensions>
-        <transverse step="1.0*cm" rmin="0*cm" rmax="500*cm" />
-        <longitudinal step="1.0*cm" zmin="-600*cm" zmax="600*cm" />
-        <translation x="100.0*cm" y="0.0*cm" z="0.0*cm" />
-        <rotation x="0" y="0" z="0" />
-      </dimensions>
-    </field>
-  </fields>
 </lccdd>

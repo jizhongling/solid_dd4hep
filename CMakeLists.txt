@@ -24,13 +24,7 @@ set(a_lib_name solid_dd4hep)
 dd4hep_configure_output()
 
 dd4hep_add_plugin(${a_lib_name} SOURCES 
-  src/EMCalorimeterSOLID_geo.cpp
-  src/FieldMapBrBz.cpp
-  src/GEMTrackerDiscSOLID_geo.cpp
-  src/NH3Target_geo.cpp
-  src/StandInGeometrySOLID_geo.cpp
-  src/HeavyGasCherenkov_geo.cpp
-  src/ThresholdGasCherenkov_geo.cpp
+  src/*.cpp
   USES ActsCore ActsPluginDD4hep
   )
 target_link_libraries(${a_lib_name}
