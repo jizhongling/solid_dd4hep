@@ -1,0 +1,42 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Sylvester Joosten, Whitney Armstrong -->
+
+<display>
+
+  <comment>
+    Colors tweaked to be displayable by geoViewer
+  </comment>
+  <vis name="AnlGreen"        alpha="1" r="100/256" g="200/256" b="0/256"/>
+  <vis name="AnlViolet"       alpha="1" r="100/256" g="0/256"   b="150/256"/>
+  <vis name="AnlProcess_Blue" alpha="1" r="0/256"   g="100/256" b="202/256"/>
+  <vis name="AnlOrange"       alpha="1" r="255/256" g="121/256" b="0"/>
+  <vis name="AnlRed"          alpha="1" r="205/256" g="45/256 " b="45/256"/>
+  <vis name="AnlGold"         alpha="1" r="248/256" g="188/256" b="0/256"/>
+  <vis name="AnlBlue"         alpha="1" r="0/256"   g="96/256"  b="156/256"/>
+  <vis name="AnlTeal"         alpha="1" r="0/256"   g="161/256" b="156/256"/>
+  <vis name="AnlGray"         alpha="1" r="102/256" g="102/256" b="102/256"/>
+  <vis name="AnlLight_Gray"   alpha="1" r="209/256" g="209/256" b="209/256"/>
+  <vis name="AnlLightGray"    ref="AnlLight_Gray" />
+  <!-- off-white (or white) don't work! -->
+  <!--vis name="AnlOff_White"    alpha="1" r="242/256" g="242/256" b="242/256"/-->
+  <vis name="AnlDarkRed"      alpha="1" r="161/256" g="45/256"  b="45/256"/>
+  <vis name="AnlDarkGreen"    alpha="1" r="0"       g="110/256" b="50/256"/>
+  <vis name="AnlDarkBlue"     alpha="1" r="45/256"   g="45/256"  b="110/256"/>
+  <vis name="AnlDelta_Red"    ref="AnlDarkRed"/>
+  <vis name="AnlDelta_Green"    ref="AnlDarkGreen"/>
+  <vis name="AnlDelta_Blue"    ref="AnlDarkBlue"/>
+
+  <vis name="GreenVis"       alpha="1.0"  r= "0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+  <vis name="RedVis"         alpha="0.5"  r= "1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
+  <vis name="BlueVis"        alpha="0.5"  r= "0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+  <vis name="OrangeVis"      alpha="1.0"  r= "1.0" g="0.45" b="0.0" showDaughters="true" visible="true"/>
+  <vis name="RedGreenVis"    alpha="0.5"  r= "1.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+  <vis name="BlueGreenVis"   alpha="0.5"  r= "0.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
+  <vis name="PurpleVis"      alpha="0.5"  r= "1.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+  <vis name="DoubleRedG"     alpha="0.5"  r= "2.0" g=".10" b="0.0" showDaughters="true" visible="true"/>
+  <vis name="RBG015"         alpha="0.5"  r= "0.0" g=".2"  b="1.0" showDaughters="true" visible="true"/>
+  <vis name="RBG510"         alpha="0.5"  r= "1.0" g=".2"  b="0.0" showDaughters="true" visible="true"/>
+  <vis name="RBG"            alpha="0.5"  r= "1.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
+  <vis name="SteelVis"       alpha="0.05"  r= "0.75" g="0.75" b="0.75" showDaughters="true" visible="true"/>
+  <vis name="GrayVis"        alpha="0.5"  r= "0.75" g="0.75" b="0.75" showDaughters="true" visible="true"/>
+</display>

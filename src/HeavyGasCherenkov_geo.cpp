@@ -61,7 +61,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     Material air = desc.air();
     Material PyrexGlass = desc.material("PyrexGlass");
-    Material N2cherenkov = desc.material("N2cherenkov");
+    Material rad_mat = desc.material("N2Optical");
     Material Copper = desc.material("Copper");
 
     double LGC_inner_radius1 = 71.0*cm;
@@ -102,7 +102,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // the gas tank
     ConeSegment   tank_main(0.5 * tank_length, rInner1, rOuter1,
                           rInner2, rOuter2);
-    Volume     v_lgc_tank("v_lgc_tank_gas", tank_main, N2cherenkov);
+    Volume     v_lgc_tank("v_lgc_tank_gas", tank_main, rad_mat);
 
     v_lgc_tank.setVisAttributes(desc.visAttributes(detElem.visStr()));
     // Everything that goes in the tank will be copies of the sector assembly volume
@@ -198,7 +198,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     //// Dummy PMT surface
     DetElement   de_pmt_array(det, "PMT_DE", 1);
     Box          pmt_array(LGC_pmt_array_size / 2.0, LGC_pmt_array_size / 2.0, 5 * mm / 2.0);
-    Volume       v_pmt_array("v_pmt_array", pmt_array, N2cherenkov);
+    Volume       v_pmt_array("v_pmt_array", pmt_array, rad_mat);
     PlacedVolume pv_pmt_array =
         v_sector.placeVolume(v_pmt_array, Transform3D(Position(0, LGC_pmt_y_pos, LGC_pmt_z_pos)) *
                                                 RotationX(LGC_pmt_tilt_angle));

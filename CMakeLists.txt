@@ -47,7 +47,7 @@ install(DIRECTORY compact/
     DESTINATION share/${PROJECT_NAME}/compact
     FILES_MATCHING PATTERN "*.xml"
     )
-install(FILES solid_sidis.xml solid_pvdis.xml
+install(FILES solid.xml
     DESTINATION share/${PROJECT_NAME}/
     )
 #-----------------------------------------------------------------------------------
