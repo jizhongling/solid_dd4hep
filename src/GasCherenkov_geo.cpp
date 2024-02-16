@@ -7,11 +7,8 @@
 #include "DD4hep/OpticalSurfaces.h"
 #include "DDRec/DetectorData.h"
 
-using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::rec;
-
-using namespace dd4hep;
 
 /** \addtogroup PID Particle ID Detectors 
  */
@@ -26,41 +23,44 @@ using namespace dd4hep;
  *
  * @{
  */
-static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetector sens) {
-    xml::DetElement detElem = handle;
-    xml_det_t x_det     = handle;
+static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetector sens)
+{
+    xml_det_t x_det = handle;
 
-    std::string detName = detElem.nameStr();
-    int detID = detElem.id();
+    auto det_name = x_det.nameStr();
+    auto dims = x_det.dimensions();
+    auto r0 = dims.rmin();
+    auto r1 = dims.rmax1();
+    auto r2 = dims.rmax2();
+    auto zmin = dims.zmin();
+    auto zmax = dims.zmax();
 
-    DetElement det(detName, detID);
-    xml::Component dims = detElem.dimensions();
-    double rInner = dims.rmin();
-    double rOuter1 = dims.rmax1();
-    double rOuter2 = dims.rmax2();
-    double zMin = dims.zmin();
-    double zMax = dims.zmax();
+    xml_dim_t x_place = x_det.child(_U(placement));
+    auto pos_x = x_place.x();
+    auto pox_y = x_place.y();
+    auto pos_z = x_place.z();
 
-    std::map<int,Position> mirror_positions;
-    std::map<int,std::array<double,3>> mirror_rotations;
-
-    for(xml_coll_t i(x_det,Unicode("mirror")); i; ++i){
-      xml_comp_t x_mir   = i;
-      //std::cout << "mirror " << x_mir.id() << "\n";
-      xml_dim_t  mir_pos = x_mir.child(_U(placement));
-      xml_dim_t  mir_rot = x_mir.child(_U(rotation));
-      mirror_positions[x_mir.id()] = Position(mir_pos.x(), mir_pos.y(), mir_pos.z());
-      mirror_rotations[x_mir.id()] = {mir_rot.x(), mir_rot.y(), mir_rot.z()};
+    // read and save location and rotation of mirrors
+    std::unordered_map<int, Position> mir_locs;
+    std::unordered_map<int, std::array<double, 3>> mir_rots;
+    for (xml_coll_t i(x_det, Unicode("mirror")); i; ++i) {
+        xml_comp_t x_mir = i;
+        xml_dim_t mir_loc = x_mir.child(_U(placement));
+        xml_dim_t mir_rot = x_mir.child(_U(rotation));
+        mir_locs[x_mir.id()] = Position(mir_loc.x(), mir_loc.y(), mir_loc.z());
+        mir_rots[x_mir.id()] = {mir_rot.x(), mir_rot.y(), mir_rot.z()};
     }
-
+}
+/*
     xml_dim_t pos       = x_det.child(_U(placement));
     double    pos_x     = pos.x();
     double    pos_y     = pos.y();
     double    pos_z     = pos.z();
 
+    auto     x_rad   = x_det.child(_U(radiator));
+    auto     rad_mat = desc.material(dd4hep::getAttrOrDefault<std::string>(x_rad, _U(material), "N2Optical"));
     Material air = desc.air();
     Material PyrexGlass = desc.material("PyrexGlass");
-    Material rad_mat = desc.material("N2Optical");
     Material Copper = desc.material("Copper");
 
     double LGC_inner_radius1 = 71.0*cm;
@@ -253,7 +253,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     return det;
 }
+*/
 //@}
 // clang-format off
-DECLARE_DETELEMENT(SoLID_LGC, createDetector)
+DECLARE_DETELEMENT(SoLID_GasCherenkov, createDetector)
 

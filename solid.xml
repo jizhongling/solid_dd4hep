@@ -77,6 +77,7 @@
   <detectors>
     <include ref="compact/LAEC.xml"/>
     <include ref="compact/FAEC.xml"/>
+    <include ref="compact/LGC.xml"/>
   </detectors>
 
   <!--  Definition of the readout segmentation/definition  -->
