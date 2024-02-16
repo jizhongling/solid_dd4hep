@@ -40,29 +40,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     auto pox_y = x_place.y();
     auto pos_z = x_place.z();
 
-    // read and save location and rotation of mirrors
-    std::unordered_map<int, Position> mir_locs;
-    std::unordered_map<int, std::array<double, 3>> mir_rots;
-    for (xml_coll_t i(x_det, Unicode("mirror")); i; ++i) {
-        xml_comp_t x_mir = i;
-        xml_dim_t mir_loc = x_mir.child(_U(placement));
-        xml_dim_t mir_rot = x_mir.child(_U(rotation));
-        mir_locs[x_mir.id()] = Position(mir_loc.x(), mir_loc.y(), mir_loc.z());
-        mir_rots[x_mir.id()] = {mir_rot.x(), mir_rot.y(), mir_rot.z()};
-    }
-}
-/*
-    xml_dim_t pos       = x_det.child(_U(placement));
-    double    pos_x     = pos.x();
-    double    pos_y     = pos.y();
-    double    pos_z     = pos.z();
-
-    auto     x_rad   = x_det.child(_U(radiator));
-    auto     rad_mat = desc.material(dd4hep::getAttrOrDefault<std::string>(x_rad, _U(material), "N2Optical"));
-    Material air = desc.air();
-    Material PyrexGlass = desc.material("PyrexGlass");
-    Material Copper = desc.material("Copper");
-
     double LGC_inner_radius1 = 71.0*cm;
     double LGC_inner_radius2 = 85.0*cm;
     double LGC_outer_radius1 = 265.0*cm;
@@ -88,26 +65,58 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     double LGC_sector_angle       = M_PI * 15.0 / 180.0;
     //double LGC_scattering_angle   = 11.0 * M_PI / 180.0;
 
+    /*
     double LGC_mirror1_tilt_angle = mirror_rotations[1][0];//25.0 * M_PI / 180.0;
     double LGC_mirror2_tilt_angle = mirror_rotations[2][0];//2.0 * M_PI / 180.0;
     double LGC_pmt_tilt_angle     = mirror_rotations[3][0];//45.0 * M_PI / 180.0;
 
     double LGC_pmt_z_pos = mirror_positions[3].z();//-30.0*cm;
     double LGC_pmt_y_pos = mirror_positions[3].y();//LGC_outer_radius1 - 20.0*cm;
+    */
     double LGC_pmt_array_size = 20.0*cm;
 
-    // the gas tank
-    ConeSegment   tank_main(0.5 * LGC_main_length, LGC_inner_radius1, LGC_outer_radius1,
+    // Everything that goes in the tank will be copies of the sector assembly volume
+    Assembly v_sector("cherenkov_sector_1");
+    DetElement de_sector("de_sector"+std::to_string(1), 1);
+
+    // build gas tank
+    auto        x_rad   = x_det.child(_U(radiator));
+    auto        rad_mat = desc.material(dd4hep::getAttrOrDefault<std::string>(x_rad, _U(material), "N2Optical"));
+    ConeSegment tank_main(0.5 * LGC_main_length, LGC_inner_radius1, LGC_outer_radius1,
                           LGC_inner_radius2, LGC_outer_radius1);
-                          // M_PI / 2.0 - LGC_sector_angle / 2.0,
-                          //M_PI / 2.0 + LGC_sector_angle / 2.0);
     ConeSegment tank_snout(0.5 * LGC_snout_length, LGC_snout_inner_radius1, LGC_snout_outer_radius1,
                            LGC_snout_inner_radius2, LGC_snout_outer_radius2);
-                           //M_PI / 2.0 - LGC_sector_angle / 2.0,
-                           //M_PI / 2.0 + LGC_sector_angle / 2.0);
-    UnionSolid sidis_tank(tank_main,tank_snout,Position(0,0,-0.5 * LGC_main_length -0.5 * LGC_snout_length));
-    Volume     v_lgc_tank("v_lgc_tank_gas", sidis_tank, rad_mat);
-    v_lgc_tank.setVisAttributes(desc,dd4hep::getAttrOrDefault(x_det, _Unicode(vis), "BlueVis"));
+    UnionSolid  sidis_tank(tank_main,tank_snout,Position(0, 0, -0.5 * LGC_main_length - 0.5 * LGC_snout_length));
+    Volume      v_lgc_tank("v_lgc_tank_gas", sidis_tank, rad_mat);
+    v_lgc_tank.setVisAttributes(desc, dd4hep::getAttrOrDefault(x_det, _Unicode(vis), "BlueVis"));
+
+    // mirrors
+    auto x_mirrors = x_det.child(_Unicode(mirrors));
+    int i = 1;
+    for (xml_coll_t il(x_mirrors, Unicode("piece")); il; ++il) {
+        xml_comp_t x_mir = il;
+        xml_dim_t mdim = x_mir.child(_U(dimensions));
+        xml_dim_t mloc = x_mir.child(_U(placement));
+        xml_dim_t mrot = x_mir.child(_U(rotation));
+        auto      mmat = desc.material(x_mir.materialStr());
+
+        Sphere mir_shell(mdim.radius(), mdim.radius() + mdim.thickness(), 0., M_PI/2.);
+        Trd1   mir_cutout(mdim.attr<double>(_Unicode(width1))/2., mdim.attr<double>(_Unicode(width2))/2.,
+                          mdim.length()/2., mdim.length()/2.);
+        auto   mir_trans = RotationX(M_PI/2.)*Transform3D(Position(0., 0., -mdim.radius()));
+        Volume v_mir("vol_mirror_" + std::to_string(i), IntersectionSolid(mir_cutout, mir_shell, mir_trans), mmat);
+        auto   mir_trans2 = Transform3D(Position(0., mloc.y(), mloc.z()))*RotationX(mrot.x())*RotationY(mrot.y())*RotationZ(mrot.z());
+        PlacedVolume pv_mir = v_sector.placeVolume(v_mir, mir_trans2);
+    }
+
+}
+/*
+
+    Material air = desc.air();
+    Material PyrexGlass = desc.material("PyrexGlass");
+    Material Copper = desc.material("Copper");
+
+    // the gas tank
 
     // Everything that goes in the tank will be copies of the sector assembly volume
     Assembly v_sector("cherenkov_sector_1");
