@@ -1,7 +1,13 @@
 <lccdd>
+
+<readouts>
+  <readout name="LightGasCherenkovHits">
+    <segmentation type="CartesianGridXY" grid_size_x="3*mm" grid_size_y="3*mm" />
+    <id>system:6,sector:11,mirror:4,module:10,x:32:-16,y:-16</id>
+  </readout>
+</readouts>
+
 <detectors>
-
-
 <comment>
   Light Gas Cherenkov Begin
 </comment>
@@ -13,23 +19,23 @@
   vis="RedVis">
 
 <placement x="0*cm" y="0*cm" z="260*cm" />
-<dimensions rmin="10*cm" rmax1="80*cm" rmax2="120*cm" zmin="20*cm"  zmax="120*cm"/>
+<dimensions numsides="30" rmin="10*cm" rmax1="80*cm" rmax2="120*cm" zmin="20*cm"  zmax="120*cm"/>
 <radiator material="EJ204"/>
 
 <comment>
-  Mirror Placements for Light Gas Cherenkov
+  Light Gas Cherenkov: Mirrors placement
 </comment>
 <mirrors>
   <support material="Copper"/>
   <piece id="1" material="PyrexGlass">
     <dimensions radius="277.51*cm" length="114.53*cm" width1="16.26*cm" width2="36.03*cm" thickness="2.0*mm"/>
     <placement x="0*cm" y="129.9*cm" z="30.3125*cm"/>
-    <rotation x="25.0*degree" y="0" z="0"/>
+    <rotation x="135.0*degree" y="180*degree" z="180*degree"/>
   </piece>
-  <piece id="2">
+  <piece id="2" material="PyrexGlass">
     <dimensions radius="157.99*cm" length="59.260*cm" width1="37.06*cm" width2="45.95*cm" thickness="2.0*mm"/>
     <placement x="0*cm" y="211.411*cm" z="50.6678*cm"/>
-    <rotation x="2.0*degree" y="0" z="0"/>
+    <rotation x="85.0*degree" y="180*degree" z="180*degree"/>
   </piece>
   <!--
   <piece id="3" >
@@ -39,6 +45,18 @@
   </piece>
   -->
 </mirrors>
+
+<comment>
+  Light Gas Cherenkov: Winston cones
+</comment>
+<winston_cone>
+  <cone>
+    <dimensions thickness="4*mm" length="30.*cm" radius1="7.0*cm" radius2="21.0*cm" inset_length="7.90909*cm"/>
+  </cone>
+  <tube>
+    <dimensions radius="11.28*cm" length="30.*cm"/>
+  </tube>
+</winston_cone>
 
 <comment>
   Light Gas Cherenkov End

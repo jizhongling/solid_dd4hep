@@ -22,10 +22,11 @@ find_package(fmt)
 set(a_lib_name solid_dd4hep)
 
 dd4hep_configure_output()
+dd4hep_set_compiler_flags()
 
 dd4hep_add_plugin(${a_lib_name} SOURCES 
   src/*.cpp
-  USES ActsCore ActsPluginDD4hep
+  USES ROOT::Core ROOT::Gdml
   )
 target_link_libraries(${a_lib_name}
   PUBLIC DD4hep::DDCore  DD4hep::DDRec fmt::fmt
