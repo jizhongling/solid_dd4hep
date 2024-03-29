@@ -105,43 +105,44 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         det.add(amod);
     }
 
-    //// ---------------
-    return det;
-}
-/*
     // ---------------
     // Winston Cone 
-    double LGC_winston_cone_thickness = 4*mm;
-    double LGC_winston_tube_inner_radius = 11.28*cm;
-    double LGC_winston_tube_length = 30.0*cm;
-    double LGC_winston_cone_length = 30.0*cm;
-    double LGC_winston_cone_inner_radius1 = 7.8*cm;
-    double LGC_winston_cone_inner_radius2 = 21.0*cm;
-    double LGC_winston_cone_inset_length = 7.90909*cm;
-    DetElement   de_winston_cone(det,"de_winston_cone1",1);
+    auto   x_winston    = x_det.child(_Unicode(winston_cone));
+
+    xml_dim_t cdims       = x_winston.child(_Unicode(cone_dimensions));
+    double cone_thickness = cdims.thickness();
+    double cone_length    = cdims.length1();
+    double cone_radius1   = cdims.radius1();
+    double cone_radius2   = cdims.radius2();
+    double cone_inset_length = cdims.inset_length();
+
+    xml_dim_t tdims    = x_winston.child(_Unicode(tube_dimensions));
+    double tube_radius = tdims.radius();
+    double tube_length = tdims.length();
+    auto   winston_mat = desc.material(x_winstone.materialStr());
+
+    DetElement   de_wcone(det, "de_winston_cone1", 1);
     Tube         winston_tube(LGC_winston_tube_inner_radius,
                       LGC_winston_tube_inner_radius + LGC_winston_cone_thickness,
                       LGC_winston_tube_length / 2.0);
-    //Cone        winston_cone(LGC_winston_cone_length / 2.0, LGC_winston_cone_inner_radius1,
-    //                  LGC_winston_cone_inner_radius1 + LGC_winston_cone_thickness,
-    //                  LGC_winston_cone_inner_radius2,
-    //                  LGC_winston_cone_inner_radius2 + LGC_winston_cone_thickness );
-    //UnionSolid  winston_cone_solid(winston_tube,winston_cone,Position(0,0,LGC_winston_tube_length / 2.0 - LGC_winston_cone_inset_length));
     Paraboloid winston_cone1(LGC_winston_cone_inner_radius1 + LGC_winston_cone_thickness,
                        LGC_winston_cone_inner_radius2 + LGC_winston_cone_thickness,
                        LGC_winston_cone_length / 2.0 );
     Paraboloid winston_cone2(LGC_winston_cone_inner_radius1,
                        LGC_winston_cone_inner_radius2,
                        LGC_winston_cone_length / 2.0 );
-
     SubtractionSolid  winston_cone(winston_cone1, winston_cone2);
 
-    Volume v_winston_cone_solid("v_winston_cone_solid", winston_cone, PyrexGlass);
+    Volume v_winston_cone_solid("v_winston_cone_solid", winston_cone, winston_mat);
     PlacedVolume pv_winston_cone_solid = v_sector.placeVolume(
         v_winston_cone_solid, Transform3D(Position(0, LGC_pmt_y_pos, LGC_pmt_z_pos)) *
                        RotationX(LGC_pmt_tilt_angle) *
                        Transform3D(Position(0, 0, LGC_winston_tube_length / 2.0 + 5.0 * mm)));
 
+    //// ---------------
+    return det;
+}
+/*
     //std::cout << " LGC_pmt_y_pos/cm " << LGC_pmt_y_pos/cm  << "\n";
     //std::cout << " LGC_pmt_z_pos/cm " << LGC_pmt_z_pos/cm  << "\n";
     //mirrorPV.addPhysVolID("layer", 2).addPhysVolID("module", 1);
