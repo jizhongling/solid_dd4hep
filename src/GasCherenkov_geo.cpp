@@ -76,6 +76,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     envPV.addPhysVolID("system", det_id);
     det.setPlacement(envPV);
 
+    // optical surfaces
+    OpticalSurfaceManager surfMgr    = desc.surfaceManager();
+    OpticalSurface        mirrorSurf = surfMgr.opticalSurface("MirrorOpticalSurface");
+    OpticalSurface        pmtSurf    = surfMgr.opticalSurface("PMTOpticalSurface");
+
     // mirrors
     auto x_mirrors = x_det.child(_Unicode(mirrors));
     int i = 1;
@@ -93,6 +98,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         Volume v_mir("vol_mirror_" + std::to_string(i), IntersectionSolid(mir_cutout, mir_shell, mir_trans), mmat);
         auto   mir_trans2 = Transform3D(Position(mloc.x(), mloc.y(), mloc.z()))*RotationZYX(mrot.z(), mrot.y(), mrot.x());
         PlacedVolume pv_mir = v_sector.placeVolume(v_mir, mir_trans2);
+        DetElement   de_mir(det, "de_mirror" + std::to_string(i) + "_shape", 1);
+        pv_mir.addPhysVolID("mirror", 1);
+        de_mir.setPlacement(pv_mir);
+        sens.setType("photoncounter");
+        v_mir.setSensitiveDetector(sens);
+
+        // optical surface
+        SkinSurface mirrorBorder_Surf(desc, de_mir, "LGCmirror", mirrorSurf, v_mir);
+        mirrorBorder_Surf.isValid();
     }
 
     // sectors
@@ -124,7 +138,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     double    tube_radius = tdims.radius();
     double    tube_length = tdims.length();
 
-    DetElement       de_wcone(det, "de_winston_cone1", 1);
+    DetElement       de_winston_cone(det, "de_winston_cone1", 1);
     Tube             winston_tube(tube_radius, tube_radius + cone_thickness, tube_length / 2.0);
     Paraboloid       winston_cone1(cone_radius1 + cone_thickness, cone_radius2 + cone_thickness, cone_length / 2.0 );
     Paraboloid       winston_cone2(cone_radius1, cone_radius2, cone_length / 2.0 );
@@ -135,19 +149,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         v_winston_cone_solid, Transform3D(Position(wpl.x(), wpl.y(), wpl.z())) *
                        RotationZYX(wrot.z(), wrot.y(), wrot.x()) *
                        Transform3D(Position(0, 0, tube_length / 2.0 + 5.0 * mm)));
-
-    //// ---------------
-    return det;
-}
-/*
-    //std::cout << " LGC_pmt_y_pos/cm " << LGC_pmt_y_pos/cm  << "\n";
-    //std::cout << " LGC_pmt_z_pos/cm " << LGC_pmt_z_pos/cm  << "\n";
-    //mirrorPV.addPhysVolID("layer", 2).addPhysVolID("module", 1);
-    //mirror_DE.setPlacement(mirrorPV);
-    //sens.setType("photoncounter");
-    //mirrorVol.setSensitiveDetector(sens);
-  
-    //// ---------------
+    de_winston_cone.setPlacement(pv_winston_cone_solid);
+    // optical surface
+    SkinSurface winstonBorder_Surf(desc, de_winston_cone, "LGCWinstonCone", mirrorSurf, v_winston_cone_solid);
+    winstonBorder_Surf.isValid();
 
     //// ---------------
     //// Dummy PMT surface
@@ -155,36 +160,26 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     Box          pmt_array(LGC_pmt_array_size / 2.0, LGC_pmt_array_size / 2.0, 5 * mm / 2.0);
     Volume       v_pmt_array("v_pmt_array", pmt_array, rad_mat);
     PlacedVolume pv_pmt_array =
-        v_sector.placeVolume(v_pmt_array, Transform3D(Position(0, LGC_pmt_y_pos, LGC_pmt_z_pos)) *
-                                                RotationX(LGC_pmt_tilt_angle));
+        v_sector.placeVolume(v_pmt_array, Transform3D(Position(wpl.x(), wpl.y(), wpl.z())) *
+                                          RotationZYX(wrot.z(), wrot.y(), wrot.x()));
 
     pv_pmt_array.addPhysVolID("mirror", 3);
     de_pmt_array.setPlacement(pv_pmt_array);
     sens.setType("photoncounter");
     v_pmt_array.setSensitiveDetector(sens);
 
+    // optical surface
+    SkinSurface pmtBorder_Surf(desc, de_pmt_array, "LGCPMTsurface", pmtSurf, v_pmt_array);
+    pmtBorder_Surf.isValid();
+
     // copper layer inside to stop photons
     Box  pmt_array_backing(LGC_pmt_array_size/2.0, LGC_pmt_array_size/2.0, 1*mm/2.0);
+    auto Copper = desc.material("Copper");
     Volume v_pmt_array_backing("v_pmt_array_backing", pmt_array_backing, Copper);
     PlacedVolume pv_pmt_array_backing = v_pmt_array.placeVolume(v_pmt_array_backing, Position(0,0,0));
 
-    // Optical Surfaces
-
-    OpticalSurfaceManager surfMgr = desc.surfaceManager();
-    OpticalSurface mirrorSurf  = surfMgr.opticalSurface("MirrorOpticalSurface");
-    OpticalSurface pmtSurf    = surfMgr.opticalSurface("PMTOpticalSurface");
-    //BorderSurface  mirrorBorder_Surf   = BorderSurface(desc, det, "RICHmirror", mirrorSurf, mirrorPV,   envPV);
-    SkinSurface mirrorBorder_Surf(desc,de_mirror1_shape,"LGCmirror", mirrorSurf, v_mirror1_shape);
-    SkinSurface winstonBorder_Surf(desc,de_winston_cone,"LGCWinstonCone", mirrorSurf, v_winston_cone_solid);
-    SkinSurface pmtBorder_Surf(desc,de_pmt_array,"LGCPMTsurface", pmtSurf, v_pmt_array);
-    //BorderSurface  bubbleSurf = BorderSurface(description, sdet, "TankBubble", airSurf,   bubblePlace, tankPlace);
-    mirrorBorder_Surf.isValid();
-    winstonBorder_Surf.isValid();
-    pmtBorder_Surf.isValid();
-    //tankSurf.isValid();
-
+    return det;
 }
-*/
 //@}
 // clang-format off
 DECLARE_DETELEMENT(SoLID_GasCherenkov, createDetector)

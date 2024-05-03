@@ -37,13 +37,6 @@
     <placement x="0*cm" y="211.411*cm" z="50.6678*cm"/>
     <rotation x="85.0*degree" y="180*degree" z="180*degree"/>
   </piece>
-  <!--
-  <piece id="3" >
-    <comment>Mirror 3 is the combination of winston cone and PMT assembly</comment>        
-    <placement x="0*cm" y="255*cm" z="-40*cm"/>
-    <rotation x="55.0*degree" y="0" z="0"/>
-  </piece>
-  -->
 </mirrors>
 
 <comment>
@@ -53,6 +46,7 @@
   <placement x="0*cm" y="255*cm" z="-40*cm"/>
   <rotation x="55.0*degree" y="0" z="0"/>
   <cone_dimensions thickness="4*mm" length="30.*cm" radius1="7.0*cm" radius2="21.0*cm"/>
+  <cone_dimensions thickness="4*mm" length="30.*cm" radius1="7.0*cm" radius2="15.0*cm"/>
   <tube_dimensions radius="11.28*cm" length="30.*cm"/>
 </winston_cone>
 
