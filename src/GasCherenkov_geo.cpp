@@ -91,7 +91,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                           mdim.length()/2., mdim.length()/2.);
         auto   mir_trans = RotationX(M_PI/2.)*Transform3D(Position(0., 0., -mdim.radius()));
         Volume v_mir("vol_mirror_" + std::to_string(i), IntersectionSolid(mir_cutout, mir_shell, mir_trans), mmat);
-        auto   mir_trans2 = Transform3D(Position(0., mloc.y(), mloc.z()))*RotationZYX(mrot.z(), mrot.y(), mrot.x());
+        auto   mir_trans2 = Transform3D(Position(mloc.x(), mloc.y(), mloc.z()))*RotationZYX(mrot.z(), mrot.y(), mrot.x());
         PlacedVolume pv_mir = v_sector.placeVolume(v_mir, mir_trans2);
     }
 
@@ -107,37 +107,34 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // ---------------
     // Winston Cone 
-    auto   x_winston    = x_det.child(_Unicode(winston_cone));
+    auto x_winston   = x_det.child(_Unicode(winston_cone));
+    auto winston_mat = desc.material(x_winston.attr<std::string>(_Unicode(material)));
 
-    xml_dim_t cdims       = x_winston.child(_Unicode(cone_dimensions));
-    double cone_thickness = cdims.thickness();
-    double cone_length    = cdims.length1();
-    double cone_radius1   = cdims.radius1();
-    double cone_radius2   = cdims.radius2();
-    double cone_inset_length = cdims.inset_length();
+    xml_dim_t wpl  = x_winston.child(_U(placement));
+    xml_dim_t wrot = x_winston.child(_U(rotation));
 
-    xml_dim_t tdims    = x_winston.child(_Unicode(tube_dimensions));
-    double tube_radius = tdims.radius();
-    double tube_length = tdims.length();
-    auto   winston_mat = desc.material(x_winstone.materialStr());
+    xml_dim_t cdims             = x_winston.child(_Unicode(cone_dimensions));
+    double    cone_thickness    = cdims.thickness();
+    double    cone_length       = cdims.attr<double>(_Unicode(length));
+    double    cone_radius1      = cdims.attr<double>(_Unicode(radius1));
+    double    cone_radius2      = cdims.attr<double>(_Unicode(radius2));
+    // double    cone_inset_length = cdims.attr<double>(_Unicode(inset_length));
 
-    DetElement   de_wcone(det, "de_winston_cone1", 1);
-    Tube         winston_tube(LGC_winston_tube_inner_radius,
-                      LGC_winston_tube_inner_radius + LGC_winston_cone_thickness,
-                      LGC_winston_tube_length / 2.0);
-    Paraboloid winston_cone1(LGC_winston_cone_inner_radius1 + LGC_winston_cone_thickness,
-                       LGC_winston_cone_inner_radius2 + LGC_winston_cone_thickness,
-                       LGC_winston_cone_length / 2.0 );
-    Paraboloid winston_cone2(LGC_winston_cone_inner_radius1,
-                       LGC_winston_cone_inner_radius2,
-                       LGC_winston_cone_length / 2.0 );
-    SubtractionSolid  winston_cone(winston_cone1, winston_cone2);
+    xml_dim_t tdims       = x_winston.child(_Unicode(tube_dimensions));
+    double    tube_radius = tdims.radius();
+    double    tube_length = tdims.length();
+
+    DetElement       de_wcone(det, "de_winston_cone1", 1);
+    Tube             winston_tube(tube_radius, tube_radius + cone_thickness, tube_length / 2.0);
+    Paraboloid       winston_cone1(cone_radius1 + cone_thickness, cone_radius2 + cone_thickness, cone_length / 2.0 );
+    Paraboloid       winston_cone2(cone_radius1, cone_radius2, cone_length / 2.0 );
+    SubtractionSolid winston_cone(winston_cone1, winston_cone2);
 
     Volume v_winston_cone_solid("v_winston_cone_solid", winston_cone, winston_mat);
     PlacedVolume pv_winston_cone_solid = v_sector.placeVolume(
-        v_winston_cone_solid, Transform3D(Position(0, LGC_pmt_y_pos, LGC_pmt_z_pos)) *
-                       RotationX(LGC_pmt_tilt_angle) *
-                       Transform3D(Position(0, 0, LGC_winston_tube_length / 2.0 + 5.0 * mm)));
+        v_winston_cone_solid, Transform3D(Position(wpl.x(), wpl.y(), wpl.z())) *
+                       RotationZYX(wrot.z(), wrot.y(), wrot.x()) *
+                       Transform3D(Position(0, 0, tube_length / 2.0 + 5.0 * mm)));
 
     //// ---------------
     return det;
