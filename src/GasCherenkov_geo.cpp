@@ -98,8 +98,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         Volume v_mir("vol_mirror_" + std::to_string(i), IntersectionSolid(mir_cutout, mir_shell, mir_trans), mmat);
         auto   mir_trans2 = Transform3D(Position(mloc.x(), mloc.y(), mloc.z()))*RotationZYX(mrot.z(), mrot.y(), mrot.x());
         PlacedVolume pv_mir = v_sector.placeVolume(v_mir, mir_trans2);
-        DetElement   de_mir(det, "de_mirror" + std::to_string(i) + "_shape", 1);
-        pv_mir.addPhysVolID("mirror", 1);
+        DetElement de_mir(det, "de_mirror" + std::to_string(i), i);
+        pv_mir.addPhysVolID("mirror", i);
         de_mir.setPlacement(pv_mir);
         sens.setType("photoncounter");
         v_mir.setSensitiveDetector(sens);
@@ -107,13 +107,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         // optical surface
         SkinSurface mirrorBorder_Surf(desc, de_mir, "LGCmirror", mirrorSurf, v_mir);
         mirrorBorder_Surf.isValid();
+        i++;
     }
 
     // sectors
     double sector_angle = 2.*M_PI / nsec;
     for (int isec = 1; isec <= nsec; isec++) {
         auto pv = v_tank.placeVolume(v_sector, Transform3D(RotationZ((isec - 1) * sector_angle)));
-        pv.addPhysVolID("sector" + std::to_string(isec), isec);
+        pv.addPhysVolID("sector", isec);
         auto amod = (isec == 1 ? de_sector : de_sector.clone("de_sector" + std::to_string(isec), isec));
         amod.setPlacement(pv);
         det.add(amod);

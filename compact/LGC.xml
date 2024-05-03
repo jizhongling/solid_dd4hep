@@ -3,7 +3,7 @@
 <readouts>
   <readout name="LightGasCherenkovHits">
     <segmentation type="CartesianGridXY" grid_size_x="3*mm" grid_size_y="3*mm" />
-    <id>system:6,sector:11,mirror:4,module:10,x:32:-16,y:-16</id>
+    <id>system:6,sector:12,mirror:4,module:10,x:32:-16,y:-16</id>
   </readout>
 </readouts>
 

@@ -60,6 +60,11 @@
 
   <surfaces>
     <comment> For the values of "finish", model and type, see TGeoOpticalSurface.h !  </comment>
+    <opticalsurface name="MirrorOpticalSurface" finish="polished" model="glisur" type="dielectric_metal" value="0">
+      <property name="REFLECTIVITY" ref="REFLECTIVITY_mirror"/>
+      <property name="RINDEX"       coldim="2" values="1.034*eV  1.5   4.136*eV  1.5"/>
+      <!--<property name="EFFICIENCY"   ref="EFFICIENCY0x8b77240"/>-->
+    </opticalsurface>
     <opticalsurface name="PMTOpticalSurface" finish="polished" model="glisur" type="dielectric_dielectric" value="0">
       <property name="RINDEX"       coldim="2" values="1.034*eV  1.5   4.136*eV  1.5"/>
       <!--<property name="EFFICIENCY"   ref="EFFICIENCY0x8b77240"/>-->
@@ -72,7 +77,7 @@
   </surfaces>
 
 
-  <include ref="compact/fields.xml"/>
+      <!--<include ref="compact/fields.xml"/>-->
 
   <detectors>
     <!--<include ref="compact/LAEC.xml"/>
