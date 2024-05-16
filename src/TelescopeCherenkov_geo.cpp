@@ -32,6 +32,12 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     auto flange_width = x_tank.attr<double>(_Unicode(flange_width));
     auto inter_shift  = x_tank.attr<double>(_Unicode(intersect_shift));
 
+    Assembly env("TCD_envelope");
+    Volume motherVol = desc.pickMotherVolume(det);
+    PlacedVolume env_pv = motherVol.placeVolume(env, Position(x_pl.x(), x_pl.y(), x_pl.z()));
+    env_pv.addPhysVolID("system", det_id);
+    det.setPlacement(env_pv);
+
     // main tube
     Tube tank_hori(0., rmax2, length1/2.);
     Tube tank_vert(0., rmax2, vert_height/2.);
@@ -53,11 +59,40 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // tank
     Volume v_tank("vol_tcd_tank", tank_solid, tank_mat);
     v_tank.setVisAttributes(desc, x_tank.attr<std::string>(_Unicode(vis)));
-    Volume motherVol = desc.pickMotherVolume(det);
-    PlacedVolume envPV = motherVol.placeVolume(v_tank, Position(x_pl.x(), x_pl.y(), x_pl.z()));
-    envPV.addPhysVolID("system", det_id);
-    det.setPlacement(envPV);
+    env.placeVolume(v_tank, Position(0., 0., 0.));
 
+    // mirror
+    xml_dim_t x_mir = x_det.child(_Unicode(mirror));
+    auto mir_r      = x_mir.r();
+    auto mir_thi    = x_mir.thickness();
+    auto mir_mat    = desc.material(x_mir.attr<std::string>(_Unicode(material)));
+    Tube mir_solid(0., mir_r, mir_thi/2.);
+    Volume v_mir("vol_tcd_mirror", mir_solid, mir_mat);
+    v_mir.setVisAttributes(desc, x_mir.attr<std::string>(_Unicode(vis)));
+    env.placeVolume(v_mir, Transform3D(Position(0., 0., inter_shift))*RotationX(M_PI/4.));
+
+    // PMT box
+    auto box_xy = 10.5*cm;
+    auto box_thi = 1.0*cm;
+    auto box_height = 6.*cm;
+    Box box_solid1(box_xy + box_thi, box_xy + box_thi, box_height/2.);
+    Box box_solid2(box_xy, box_xy, (box_height - box_thi)/2.);
+    SubtractionSolid box_solid(box_solid1, box_solid2, Position(0., -box_thi/2., 0.));
+    Volume v_box("vol_tcd_box", box_solid, tank_mat);
+    v_box.setVisAttributes(desc, x_tank.attr<std::string>(_Unicode(vis)));
+    env.placeVolume(v_box, Transform3D(Position(0., vert_height + box_height/2., inter_shift))*RotationX(M_PI/2.));
+
+
+    //// ---------------
+    //// Dummy PMT surface
+    DetElement   pmt_array_de(det, "PMT_DE", 1);
+    Box          pmt_array(10. * cm, 10. * cm, 5 * mm / 2.0);
+    Volume       v_pmt_array("v_pmt_array", pmt_array, desc.material("PyrexGlass"));
+    PlacedVolume pmt_array_pv = env.placeVolume(v_pmt_array, Transform3D(Position(0., vert_height + 5.*cm, inter_shift))*RotationX(M_PI/2.));
+    v_pmt_array.setVisAttributes(desc, "AnlGold");
+    pmt_array_pv.addPhysVolID("pmt", 3);
+    pmt_array_de.setPlacement(pmt_array_pv);
+    v_pmt_array.setSensitiveDetector(sens);
     return det;
 }
 //@}

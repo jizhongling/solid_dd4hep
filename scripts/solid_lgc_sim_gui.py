@@ -27,7 +27,7 @@ from g4units import GeV, cm
 
 def run():
   kernel = DDG4.Kernel()
-  kernel.loadGeometry("solid.xml")
+  kernel.loadGeometry("solid_beamtest.xml")
 
   DDG4.importConstants(kernel.detectorDescription(), debug=False)
   geant4 = DDG4.Geant4(kernel, tracker='Geant4TrackerCombineAction')
@@ -81,6 +81,7 @@ def run():
   part.adopt(user)
   """
   geant4.setupTracker('LightGasCherenkov')
+  # geant4.setupTracker('TelescopeCherenkov')
 
   # Now build the physics list:
   phys = geant4.setupPhysics('')

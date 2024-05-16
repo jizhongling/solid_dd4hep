@@ -48,15 +48,17 @@ if __name__ == "__main__":
     # Allow energy depositions to 0 energy in trackers (which include optical detectors)
     SIM.filter.tracker = "edep0"
 
+    # det = "TelescopeCherenkov"
+    det = "LightGaseCherenkov"
     # Some detectors are only sensitive to optical photons
     SIM.filter.filters["opticalphotons"] = dict(
         name="ParticleSelectFilter/OpticalPhotonSelector",
         parameter={"particle": "opticalphoton"},
         )
-    SIM.filter.mapDetFilter["LightGasCherenkov"] = "opticalphotons"
+    SIM.filter.mapDetFilter[det] = "opticalphotons"
 
     # Use the optical tracker
-    SIM.action.mapActions["LightGasCherenkov"] = "Geant4OpticalTrackerAction"
+    SIM.action.mapActions[det] = "Geant4OpticalTrackerAction"
 
     # Disable user tracker particle handler, so hits can be associated to photons
     SIM.part.userParticleHandler = ""
