@@ -1,0 +1,29 @@
+<lccdd>
+
+<readouts>
+  <readout name="TelescopeCherenkovHits">
+    <segmentation type="CartesianGridXY" grid_size_x="3*mm" grid_size_y="3*mm" />
+    <id>system:6,sector:12,mirror:4,module:10,x:32:-16,y:-16</id>
+  </readout>
+</readouts>
+
+<detectors>
+<comment>
+  Light Gas Cherenkov Begin
+</comment>
+<detector
+  id="7"
+  name="TelescopeCherenkov"
+  type="SoLID_TelescopeCherenkov"
+  readout="TelescopeCherenkovHits">
+
+<placement x="0*cm" y="0*cm" z="100*cm" />
+<tank material="Aluminum" vis="SteelVis"
+  rmin="7*cm" rmax1="8*cm" rmax2="9*cm"
+  flange_width="1*cm" length1="58.25*cm" length2="30*cm"
+  intersect_shift="12*cm" vert_height="20*cm"/>
+<box material="Aluminum" side="20*cm" height="10*cm" thickness="1*cm"/>
+</detector>
+
+</detectors>
+</lccdd>
