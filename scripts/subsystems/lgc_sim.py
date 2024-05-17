@@ -48,17 +48,15 @@ if __name__ == "__main__":
     # Allow energy depositions to 0 energy in trackers (which include optical detectors)
     SIM.filter.tracker = "edep0"
 
-    # det = "TelescopeCherenkov"
-    det = "LightGaseCherenkov"
     # Some detectors are only sensitive to optical photons
     SIM.filter.filters["opticalphotons"] = dict(
         name="ParticleSelectFilter/OpticalPhotonSelector",
         parameter={"particle": "opticalphoton"},
         )
-    SIM.filter.mapDetFilter[det] = "opticalphotons"
+    SIM.filter.mapDetFilter["PFRICH"] = "opticalphotons"
 
-    # Use the optical tracker
-    SIM.action.mapActions[det] = "Geant4OpticalTrackerAction"
+    # Use the optical tracker for the PFRICH
+    SIM.action.mapActions["PFRICH"] = "Geant4OpticalTrackerAction"
 
     # Disable user tracker particle handler, so hits can be associated to photons
     SIM.part.userParticleHandler = ""
@@ -66,15 +64,19 @@ if __name__ == "__main__":
     # Particle gun settings: pions with fixed energy and theta, varying phi
     SIM.numberOfEvents = 100
     SIM.enableGun = True
-    SIM.gun.energy = "3*GeV"
-    SIM.gun.particle = "e-"
-    SIM.gun.thetaMin = "16.0*deg"
-    SIM.gun.thetaMax = "16.1*deg"
+    SIM.gun.energy = "40*GeV"
+    SIM.gun.particle = "pi+"
+    SIM.gun.thetaMin = "195.0*deg"
+    SIM.gun.thetaMax = "195.1*deg"
     SIM.gun.distribution = "cos(theta)"
-    SIM.gun.position = (0., 0., "-300.*cm")
+
+    # Installed compact file, otherwise assume the user passed `--compactFile`
+    install_prefix = os.environ.get("DD4hepExamplesINSTALL")
+    if install_prefix:
+        SIM.compactFile = install_prefix + "/examples/RICH/compact/pfrich.xml"
 
     # Output file (assuming CWD)
-    SIM.outputFile = "optics_lgc.root"
+    SIM.outputFile = "sim.root"
     SIM.outputConfig.forceDD4HEP = True
 
     # Override with user options
