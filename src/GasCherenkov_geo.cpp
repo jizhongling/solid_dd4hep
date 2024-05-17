@@ -29,7 +29,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     std::string     det_name = x_det.nameStr();
     int             det_id   = x_det.id();
     DetElement      det(det_name, det_id);
-    sens.setType("photoncounter");
+    // sensitive detector type
+    sens.setType("tracker");
 
     auto dims = x_det.dimensions();
     auto r0   = dims.rmin();
@@ -101,12 +102,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         DetElement de_mir(det, "de_mirror" + std::to_string(i), i);
         pv_mir.addPhysVolID("mirror", i);
         de_mir.setPlacement(pv_mir);
-        sens.setType("photoncounter");
         v_mir.setSensitiveDetector(sens);
 
         // optical surface
-        SkinSurface mirrorBorder_Surf(desc, de_mir, "LGCmirror", mirrorSurf, v_mir);
-        mirrorBorder_Surf.isValid();
+        // SkinSurface mirrorBorder_Surf(desc, de_mir, "LGCmirror", mirrorSurf, v_mir);
+        // mirrorBorder_Surf.isValid();
         i++;
     }
 
@@ -166,7 +166,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     pv_pmt_array.addPhysVolID("mirror", 3);
     de_pmt_array.setPlacement(pv_pmt_array);
-    sens.setType("photoncounter");
     v_pmt_array.setSensitiveDetector(sens);
 
     // optical surface

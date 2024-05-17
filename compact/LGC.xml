@@ -19,7 +19,7 @@
   vis="RedVis">
 
 <placement x="0*cm" y="0*cm" z="260*cm" />
-<dimensions numsides="30" rmin="10*cm" rmax1="80*cm" rmax2="120*cm" zmin="20*cm"  zmax="120*cm"/>
+<dimensions numsides="30" rmin="10*cm" rmax1="80*cm" rmax2="120*cm" zmin="20*cm"  zmax="220*cm"/>
 <radiator material="EJ204"/>
 
 <comment>

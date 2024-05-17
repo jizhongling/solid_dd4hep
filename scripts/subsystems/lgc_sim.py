@@ -1,10 +1,13 @@
 """
 DD4hep simulation with some argument parsing
 Based on M. Frank and F. Gaede runSim.py
-   @author  A.Sailer
-   @version 0.1
+   @author  C.Peng
+Modified with settings for SoLID simulation
 
-Modified with settings for RICH simulation
+[simulation]:
+    python scripts/subsystems/lgc_sim.py --compactFile solid.xml --runType batch
+[visualization]:
+    python scripts/subsystems/lgc_sim.py --compactFile solid.xml --runType qt --macro macro/vis.mac
 """
 from __future__ import absolute_import, unicode_literals
 import logging
@@ -53,27 +56,23 @@ if __name__ == "__main__":
         name="ParticleSelectFilter/OpticalPhotonSelector",
         parameter={"particle": "opticalphoton"},
         )
-    SIM.filter.mapDetFilter["PFRICH"] = "opticalphotons"
+    SIM.filter.mapDetFilter["LightGasCherenkov"] = "opticalphotons"
 
     # Use the optical tracker for the PFRICH
-    SIM.action.mapActions["PFRICH"] = "Geant4OpticalTrackerAction"
+    SIM.action.mapActions["LightGasCherenkov"] = "Geant4OpticalTrackerAction"
 
     # Disable user tracker particle handler, so hits can be associated to photons
     SIM.part.userParticleHandler = ""
 
-    # Particle gun settings: pions with fixed energy and theta, varying phi
+    # Particle gun settings: electrons with fixed energy and theta, varying phi
     SIM.numberOfEvents = 100
     SIM.enableGun = True
-    SIM.gun.energy = "40*GeV"
-    SIM.gun.particle = "pi+"
-    SIM.gun.thetaMin = "195.0*deg"
-    SIM.gun.thetaMax = "195.1*deg"
+    SIM.gun.position = (0., 0., "-300*cm")
+    SIM.gun.energy = "5*GeV"
+    SIM.gun.particle = "e-"
+    SIM.gun.thetaMin = "12.0*deg"
+    SIM.gun.thetaMax = "12.1*deg"
     SIM.gun.distribution = "cos(theta)"
-
-    # Installed compact file, otherwise assume the user passed `--compactFile`
-    install_prefix = os.environ.get("DD4hepExamplesINSTALL")
-    if install_prefix:
-        SIM.compactFile = install_prefix + "/examples/RICH/compact/pfrich.xml"
 
     # Output file (assuming CWD)
     SIM.outputFile = "sim.root"
