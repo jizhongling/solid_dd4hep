@@ -1,12 +1,161 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Jihee Kim, Zhenyu Ye, Sylvester Joosten -->
+<!-- Copyright (C) 2024 Chao Peng, Whitney Armstrong -->
 
-<materials>
-  <!--
-       Air by weight from
+<lccdd>
+  <properties>
+    <matrix name="RINDEX__Vacuum" coldim="2" values="
+      1.0*eV 1.0
+      5.1*eV 1.0
+      "/>
+    <matrix name="RINDEX__Air" coldim="2" values="
+      1.0*eV 1.00029
+      5.1*eV 1.00029
+      "/>
+    <matrix name="RINDEX__Quartz" coldim="2" values="
+      1.0*eV 1.46
+      5.1*eV 1.46
+      "/>
+    <matrix name="RINDEX__N2" coldim="2" values="
+      1.0*eV 1.00033
+      4.0*eV 1.00033
+      5.1*eV 1.00033
+      "/>
+    <matrix name="RINDEX__Pyrex" coldim="2" values="
+      1.0*eV 1.5
+      4.0*eV 1.5
+      5.1*eV 1.5
+      "/>
+    <matrix name="ABSLENGTH__Pyrex" coldim="2" values="
+      1.0*eV 10.0*cm
+      4.0*eV 10.0*cm
+      5.1*eV 10.0*cm
+      "/>
 
-       http://www.engineeringtoolbox.com/air-composition-24_212.html
-  -->
+    <comment>
+    Absorption length is caculated using transmittance values for 2 mm thickness (crystan standard UV grade) from
+    https://www.crystran.co.uk/optical-materials/sapphire-al2o3
+
+    F = ((n - 1) * (n - 1)) / ((n + 1) * (n + 1))
+
+    Absorption length = (-1 / ln(transmittance + 2*F)) * 2 mm
+
+    where:
+          F - Fresnel reflection coefficient
+          n - Refractive index of Sapphire
+
+    </comment>
+
+    <matrix name= "REFLECTIVITY_LGCMirror" coldim="2" values="
+      1.0*eV  0.8
+      4.0*eV  0.8
+      5.1*eV  0.8
+      "/>
+    <matrix name="RINDEX__Aerogel" coldim="2" values="
+      1.0*eV 1.030
+      4.0*eV 1.030
+      5.1*eV 1.030
+      "/>
+    <matrix name="ABSLENGTH__Aerogel" coldim="2" values="
+      1.0*eV 4.0*cm
+      4.0*eV 4.0*cm
+      5.1*eV 4.0*cm
+      "/>
+    <matrix name="RINDEX__Acrylic" coldim="2" values="
+      1240*eV/1100  1.49
+      1240*eV/600   1.49
+      1240*eV/400   1.49
+      "/>
+    <matrix name="ABSLENGTH__Acrylic" coldim="2" values="
+      1240*eV/1100 2631*mm
+      1240*eV/1000 2631*mm
+      1240*eV/900  2631*mm
+      1240*eV/800  2631*mm
+      1240*eV/700  2500*mm
+      1240*eV/600  2272*mm
+      1240*eV/500  2000*mm
+      1240*eV/400  1315*mm
+      1240*eV/300  1613*mm
+      1240*eV/250  740*mm
+      1240*eV/225  125*mm
+      1240*eV/210  10*mm
+      1240*eV/200  0*mm
+      "/>
+  </properties>
+
+  <materials>
+    <material name="Air">
+      <D type="density" unit="g/cm3" value="0.0012"/>
+      <fraction n="0.754" ref="N"/>
+      <fraction n="0.234" ref="O"/>
+      <fraction n="0.012" ref="Ar"/>
+    </material>
+    <material name="AirOptical">
+      <D type="density" unit="g/cm3" value="0.0012"/>
+      <fraction n="0.754" ref="N"/>
+      <fraction n="0.234" ref="O"/>
+      <fraction n="0.012" ref="Ar"/>
+      <property name="RINDEX" ref="RINDEX__Air"/>
+      <property name="ABSLENGTH" coldim="2" values="1*eV  200*m  5*eV  200*m"/>
+    </material>
+    <material name="Vacuum">
+      <D type="density" unit="g/cm3" value="0.0000000001"/>
+      <fraction n="0.754" ref="N"/>
+      <fraction n="0.234" ref="O"/>
+      <fraction n="0.012" ref="Ar"/>
+    </material>
+    <material name="VacuumOptical">
+      <D type="density" unit="g/cm3" value="0.0000000001"/>
+      <fraction n="0.754" ref="N"/>
+      <fraction n="0.234" ref="O"/>
+      <fraction n="0.012" ref="Ar"/>
+      <property name="RINDEX" ref="RINDEX__Vacuum"/>
+      <property name="ABSLENGTH"               coldim="2" values="1*eV  2000*m  5*eV  2000*m"/>
+    </material>
+    <material name="N2Optical">
+      <D type="density" value="0.00125" unit="g/cm3"/>
+      <composite n="1" ref="N"/>
+      <property name="RINDEX"  ref="RINDEX__N2"/>
+    </material>
+    <material name="PyrexGlassOptical">
+      <D type="density" value="2.23" unit="g/cm3"/>
+      <fraction n="0.806" ref="SiliconOxide"/>
+      <fraction n="0.130" ref="BoronOxide"/>
+      <fraction n="0.040" ref="SodiumOxide"/>
+      <fraction n="0.023" ref="AluminumOxide"/>
+      <property name="RINDEX" ref="RINDEX__Pyrex"/>
+      <property name="ABSLENGTH" ref="ABSLENGTH__Pyrex"/>
+    </material>
+    <material name="AerogelOptical">
+      <D value="0.2" unit="g / cm3"/>
+      <fraction n="0.625" ref="SiliconOxide"/>
+      <fraction n="0.374" ref="SiliconOxide"/>
+      <fraction n="0.001" ref="C"/>
+      <property name="RINDEX" ref="RINDEX__Aerogel"/>
+      <property name="ABSLENGTH" ref="ABSLENGTH__Aerogel"/>
+    </material>
+    <material name="AcrylicOptical">
+      <D type="density" value="1.18" unit="g/cm3"/>
+      <composite n="5" ref="C"/>
+      <composite n="2" ref="O"/>
+      <composite n="8" ref="H"/>
+      <property name="RINDEX" ref="RINDEX__Acrylic"/>
+      <property name="ABSLENGTH" ref="ABSLENGTH__Acrylic"/>
+    </material>
+    <material name="leadtungsten_optical">
+      <D type="density" value="8.3" unit="g / cm3"/>
+      <composite n="1" ref="Pb"/>
+      <composite n="1" ref="W"/>
+      <composite n="4" ref="O"/>
+      <property name="RINDEX" coldim="2"
+                values="1.551*eV  2.4
+                        3.545*eV  2.40"/>
+      <property name="ABSLENGTH" coldim="2"
+                values="1.551*eV  200.0*cm
+                        3.545*eV  200.0*cm"/>
+      <property name="SCINTILLATIONYIELD1"  value="200.0/MeV"/>
+      <property name="SCINTILLATIONTIMECONSTANT1"    value="6.0*ns"/>
+      <property name="RESOLUTIONSCALE"     value="1.0"/>
+    </material>
   <material name="Air">
     <D type="density" unit="g/cm3" value="0.0012"/>
     <fraction n="0.754" ref="N"/>
@@ -520,4 +669,12 @@
     <composite n="521" ref="H" />
     <composite n="474" ref="C" />
   </material>
-</materials>
+  </materials>
+  <surfaces>
+    <opticalsurface finish="polished" model="glisur" name="MirrorOpticalSurface" type="dielectric_metal" value="0">
+      <property name="REFLECTIVITY" ref="REFLECTIVITY_LGCMirror"/>
+      <property name="RINDEX"       coldim="2" values="1.034*eV  1.5   4.136*eV  1.5"/>
+      <!--<property name="EFFICIENCY"   ref="EFFICIENCY0x8b77240"/>-->
+    </opticalsurface>
+  </surfaces>
+</lccdd>
