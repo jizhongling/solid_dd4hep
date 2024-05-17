@@ -181,18 +181,18 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     pv_pmt_array.addPhysVolID("mirror", 3);
     de_pmt_array.setPlacement(pv_pmt_array);
     v_pmt_array.setSensitiveDetector(sens);
-
     // optical surface
     SkinSurface pmt_skin(desc, de_pmt_array, "LGCPMTsurface", pmt_surf, v_pmt_array);
     pmt_skin.isValid();
 
+    /*
     // copper layer inside to stop photons
     Box  pmt_array_backing(pmt_x/2., pmt_y/2., 1*mm/2.0);
     auto Copper = desc.material("Copper");
     Volume v_pmt_array_backing("v_pmt_array_backing", pmt_array_backing, Copper);
     // PlacedVolume pv_pmt_array_backing = 
     v_pmt_array.placeVolume(v_pmt_array_backing, Position(0,0,0));
-
+    */
     return det;
 }
 //@}
