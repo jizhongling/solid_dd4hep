@@ -19,7 +19,10 @@
   vis="RedVis">
 
 <placement x="0*cm" y="0*cm" z="260*cm" />
-<dimensions numsides="30" rmin="10*cm" rmax1="80*cm" rmax2="120*cm" zmin="20*cm"  zmax="220*cm"/>
+<dimensions numsides="30">
+  <main rmin1="71*cm" rmax1="265*cm" rmin2="85*cm" rmax2="265*cm" length="155*cm" />
+  <snout rmin1="58*cm" rmax1="127*cm" rmin2="58*cm" rmax2="144*cm" length="107*cm" />
+</dimensions>
 <radiator material="N2Optical"/>
 
 <comment>
@@ -27,12 +30,12 @@
 </comment>
 <mirrors>
   <support material="Copper"/>
-  <piece id="1" material="PyrexGlassOptical">
+  <piece id="1" material="N2Optical" surface="MirrorOpticalSurface">
     <dimensions radius="277.51*cm" length="114.53*cm" width1="16.26*cm" width2="36.03*cm" thickness="2.0*mm"/>
     <placement x="0*cm" y="129.9*cm" z="30.3125*cm"/>
     <rotation x="135.0*degree" y="180*degree" z="180*degree"/>
   </piece>
-  <piece id="2" material="PyrexGlassOptical">
+  <piece id="2" material="PyrexGlassOptical" surface="MirrorOpticalSurface">
     <dimensions radius="157.99*cm" length="59.260*cm" width1="37.06*cm" width2="45.95*cm" thickness="2.0*mm"/>
     <placement x="0*cm" y="211.411*cm" z="50.6678*cm"/>
     <rotation x="85.0*degree" y="180*degree" z="180*degree"/>
@@ -42,13 +45,16 @@
 <comment>
   Light Gas Cherenkov: Winston cones
 </comment>
-<winston_cone material="PyrexGlassOptical">
+<winston_cone material="PyrexGlassOptical" surface="MirrorOpticalSurface">
   <placement x="0*cm" y="255*cm" z="-40*cm"/>
   <rotation x="55.0*degree" y="0" z="0"/>
   <cone_dimensions thickness="4*mm" length="30.*cm" radius1="7.0*cm" radius2="21.0*cm"/>
   <cone_dimensions thickness="4*mm" length="30.*cm" radius1="7.0*cm" radius2="15.0*cm"/>
   <tube_dimensions radius="11.28*cm" length="30.*cm"/>
 </winston_cone>
+<pmt_array surface="PMTOpticalSurface">
+  <dimensions x="20*cm" y="20*cm"/>
+</pmt_aarray>
 
 <comment>
   Light Gas Cherenkov End

@@ -45,7 +45,7 @@
 
     </comment>
 
-    <matrix name= "REFLECTIVITY_LGCMirror" coldim="2" values="
+    <matrix name= "REFLECTIVITY_Mirror" coldim="2" values="
       1.0*eV  0.8
       4.0*eV  0.8
       5.1*eV  0.8
@@ -147,7 +147,7 @@
   </materials>
   <surfaces>
     <opticalsurface finish="polished" model="glisur" name="MirrorOpticalSurface" type="dielectric_metal" value="0">
-      <property name="REFLECTIVITY" ref="REFLECTIVITY_LGCMirror"/>
+      <property name="REFLECTIVITY" ref="REFLECTIVITY_Mirror"/>
       <property name="RINDEX"       coldim="2" values="1.034*eV  1.5   4.136*eV  1.5"/>
       <!--<property name="EFFICIENCY"   ref="EFFICIENCY0x8b77240"/>-->
     </opticalsurface>
