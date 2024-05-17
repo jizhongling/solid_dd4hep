@@ -13,7 +13,8 @@
   <!-- materials -->
   <includes>
     <gdmlFile ref="${DD4hepINSTALL}/DDDetectors/compact/elements.xml"/>
-    <File ref="compact/materials.xml"/>
+    <file ref="compact/materials.xml"/>
+    <file ref="compact/optics.xml"/>
   </includes>
 
   <!-- default limits setting -->
