@@ -18,10 +18,16 @@
   readout="LightGasCherenkovHits"
   vis="RedVis">
 
-<placement x="0*cm" y="0*cm" z="260*cm" />
+<placement x="0*cm" y="0*cm" z0="97*cm" />
 <dimensions numsides="30">
-  <main rmin1="71*cm" rmax1="265*cm" rmin2="85*cm" rmax2="265*cm" length="155*cm" />
-  <snout rmin1="58*cm" rmax1="127*cm" rmin2="58*cm" rmax2="144*cm" length="107*cm" />
+  <segments>
+    <comment> snout </comment>
+    <segment rmin1="48.7*cm" rmax1="130*cm" rmin2="59.7*cm" rmax2="130*cm" length="97*cm" />
+    <segment rmin1="59.7*cm" rmax1="130*cm" rmin2="61.5*cm" rmax2="145*cm" length="16*cm" />
+    <segment rmin1="61.5*cm" rmax1="145*cm" rmin2="63.4*cm" rmax2="163*cm" length="22*cm" />
+    <comment> tank </comment>
+    <segment rmin1="63.4*cm" rmax1="263*cm" rmin2="73.2*cm" rmax2="263*cm" length="80*cm" />
+  </segments>
 </dimensions>
 <radiator material="N2Optical"/>
 

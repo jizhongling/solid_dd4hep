@@ -32,30 +32,54 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // sensitive detector type
     sens.setType("tracker");
 
-    auto dims = x_det.dimensions();
-    int  nsec = dims.numsides();
-    xml_dim_t dims_tank = dims.child(_Unicode(main));
-    xml_dim_t dims_snout = dims.child(_Unicode(snout));
+    auto dims    = x_det.dimensions();
+    int  nsec    = dims.numsides();
+    auto x_rad   = x_det.child(_U(radiator));
+    auto rad_mat = desc.material(x_rad.attr<std::string>(_U(material)));
 
     xml_dim_t x_place = x_det.child(_U(placement));
-    auto pos_x = x_place.x();
-    auto pos_y = x_place.y();
-    auto pos_z = x_place.z();
+    auto pos_x        = x_place.x();
+    auto pos_y        = x_place.y();
+    auto pos_z0       = x_place.z0();
 
     // Everything that goes in the tank will be copies of the sector assembly volume
-    Assembly v_sector("cherenkov_sector_1");
-    DetElement de_sector("de_sector" + std::to_string(1), 1);
+    Assembly v_sector("cherenkov_sector");
+    DetElement de_sector("de_sector", 1);
 
     // gas tank
-    auto        x_rad   = x_det.child(_U(radiator));
-    auto        rad_mat = desc.material(x_rad.attr<std::string>(_U(material)));
+    // snout first
+    std::vector<double> tank_lengths;
+    std::vector<ConeSegment> tank_solids;
+    // collect tank segments
+    auto x_tank = dims.child(_Unicode(segments)); 
+    for (xml_coll_t il(x_tank, _Unicode(segment)); il; ++il) {
+        xml_dim_t idim = il;
+        tank_solids.emplace_back(idim.length()/2., idim.rmin1(), idim.rmax1(), idim.rmin2(), idim.rmax2());
+	tank_lengths.push_back(idim.length());
+    }
+    Volume v_tank;
+    // make a union solid out of it
+    // 0 size also include and will raise errors
+    if (tank_solids.size() <= 1) {
+        v_tank = Volume("vol_gas_tank", tank_solids[0], rad_mat);
+    } else {
+        double curr_length = tank_lengths[0] + tank_lengths[1];
+        UnionSolid tank_union(tank_solids[0], tank_solids[1], Position(0., 0., curr_length/2.));
+	for (size_t i = 2; i < tank_solids.size(); ++i) {
+            curr_length += tank_lengths[i];
+            tank_union = UnionSolid(tank_union, tank_solids[i], Position(0., 0., curr_length/2.));
+        }
+	v_tank = Volume("vol_gas_tank", tank_union, rad_mat);
+    }
+/*
     ConeSegment tank_main(dims_tank.length()/2., dims_tank.rmin1(), dims_tank.rmax1(), dims_tank.rmin2(), dims_tank.rmax2());
     ConeSegment tank_snout(dims_snout.length()/2., dims_snout.rmin1(), dims_snout.rmax1(), dims_snout.rmin2(), dims_snout.rmax2());
     UnionSolid  tank_solid(tank_main,tank_snout,Position(0, 0, -(dims_tank.length() + dims_snout.length())/2.));
     Volume      v_tank("vol_gas_tank", tank_solid, rad_mat);
+*/
     v_tank.setVisAttributes(desc, dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BlueVis"));
     Volume motherVol = desc.pickMotherVolume(det);
-    PlacedVolume envPV = motherVol.placeVolume(v_tank, Position(pos_x, pos_y, pos_z));
+    PlacedVolume envPV = motherVol.placeVolume(v_tank, Position(pos_x, pos_y, pos_z0 + tank_lengths[0]/2.));
     envPV.addPhysVolID("system", det_id);
     det.setPlacement(envPV);
 
@@ -65,7 +89,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // mirrors
     auto x_mirrors = x_det.child(_Unicode(mirrors));
     int i = 1;
-    for (xml_coll_t il(x_mirrors, Unicode("piece")); il; ++il) {
+    for (xml_coll_t il(x_mirrors, _Unicode(piece)); il; ++il) {
         xml_comp_t x_mir = il;
         xml_dim_t mdim = x_mir.child(_U(dimensions));
         xml_dim_t mloc = x_mir.child(_U(placement));
