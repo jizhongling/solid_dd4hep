@@ -3,7 +3,8 @@
 
 <display>
   <comment>
-    color codes from CSS
+    color codes from CSS, see the colors here:
+    https://matplotlib.org/stable/gallery/color/named_colors.html
   </comment>
   <vis name="aliceblue"               alpha="1" r="240/255" g="248/255" b="255/255" />
   <vis name="antiquewhite"            alpha="1" r="250/255" g="235/255" b="215/255" />
