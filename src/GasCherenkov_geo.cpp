@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2024 Chao Peng
+
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/OpticalSurfaces.h"
 #include "DD4hep/Printout.h"
@@ -10,19 +13,6 @@
 using namespace dd4hep;
 using namespace dd4hep::rec;
 
-/** \addtogroup PID Particle ID Detectors 
- */
-/** \addtogroup ThresholdGasCherenkov Light Gas (threshold) Cherenkov detector.
- * \brief Type: **ThresholdGasCherenkov**.
- * \ingroup PID
- *
- * \code
- *   <detector>
- *   </detector>
- * \endcode
- *
- * @{
- */
 static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetector sens)
 {
     xml::DetElement x_det    = handle;
@@ -66,7 +56,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         }
         v_tank = Volume("v_gas_tank", tank_union, rad_mat);
     }
-    v_tank.setVisAttributes(desc, dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BlueVis"));
+    v_tank.setVisAttributes(desc, x_tank.attr<std::string>(_Unicode(vis)));
     Volume motherVol = desc.pickMotherVolume(det);
     // z value to shift the center of the envelope from its first segment's center to the very beginning
     double shift_z = tank_lengths[0]/2.;
@@ -121,6 +111,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         PlacedVolume      pv_mir = v_sector.placeVolume(v_mir, Position(mpl.x(), mpl.y(), mpl.z() - shift_z));
         DetElement        de_mir(det, "de_mirror_" + std::to_string(mid), mid);
         de_mir.setPlacement(pv_mir);
+        v_mir.setVisAttributes(desc, x_mir.attr<std::string>(_Unicode(vis)));
 
         // optical surface
         auto msurf = surfMgr.opticalSurface(x_mir.attr<std::string>(_Unicode(surface)));
@@ -158,6 +149,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     PlacedVolume pv_pmt_array = winston_assem.placeVolume(v_pmt_array, Position(0., 0., 0.));
     pv_pmt_array.addPhysVolID("module", 1);
     de_pmt_array.setPlacement(pv_pmt_array);
+    v_pmt_array.setVisAttributes(desc, x_pmt.attr<std::string>(_Unicode(vis)));
 
     // build cone (its end touches the PMT surface)
     xml_dim_t x_cone            = x_winston.child(_Unicode(cone));
@@ -173,6 +165,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     Volume           v_winston_cone("v_winston_cone", winston_cone_solid, winston_mat);
     PlacedVolume     pv_winston_cone = winston_assem.placeVolume(v_winston_cone, Position(0., 0., (cone_length + pmt_dz)/2.));
     de_winston_cone.setPlacement(pv_winston_cone);
+    v_winston_cone.setVisAttributes(desc, x_cone.attr<std::string>(_Unicode(vis)));
 
     // optical surface
     auto wsurf = surfMgr.opticalSurface(x_winston.attr<std::string>(_Unicode(surface)));
@@ -190,10 +183,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     Volume    v_winston_shield("v_winston_shield", winston_shield_solid, shield_mat);
     // wrapping around PMT
     winston_assem.placeVolume(v_winston_shield, Position(0., 0., x_shield.attr<double>(_Unicode(shift_z))));
+    v_winston_shield.setVisAttributes(desc, x_shield.attr<std::string>(_Unicode(vis)));
 
     return det;
 }
-//@}
-// clang-format off
 DECLARE_DETELEMENT(SoLID_GasCherenkov, createDetector)
 

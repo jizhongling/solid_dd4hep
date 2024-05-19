@@ -1,42 +1,156 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Sylvester Joosten, Whitney Armstrong -->
+<!-- Copyright (C) 2024 Chao Peng -->
 
 <display>
-
   <comment>
-    Colors tweaked to be displayable by geoViewer
+    color codes from CSS
   </comment>
-  <vis name="AnlGreen"        alpha="1" r="100/256" g="200/256" b="0/256"/>
-  <vis name="AnlViolet"       alpha="1" r="100/256" g="0/256"   b="150/256"/>
-  <vis name="AnlProcess_Blue" alpha="1" r="0/256"   g="100/256" b="202/256"/>
-  <vis name="AnlOrange"       alpha="1" r="255/256" g="121/256" b="0"/>
-  <vis name="AnlRed"          alpha="1" r="205/256" g="45/256 " b="45/256"/>
-  <vis name="AnlGold"         alpha="1" r="248/256" g="188/256" b="0/256"/>
-  <vis name="AnlBlue"         alpha="1" r="0/256"   g="96/256"  b="156/256"/>
-  <vis name="AnlTeal"         alpha="1" r="0/256"   g="161/256" b="156/256"/>
-  <vis name="AnlGray"         alpha="1" r="102/256" g="102/256" b="102/256"/>
-  <vis name="AnlLight_Gray"   alpha="1" r="209/256" g="209/256" b="209/256"/>
-  <vis name="AnlLightGray"    ref="AnlLight_Gray" />
-  <!-- off-white (or white) don't work! -->
-  <!--vis name="AnlOff_White"    alpha="1" r="242/256" g="242/256" b="242/256"/-->
-  <vis name="AnlDarkRed"      alpha="1" r="161/256" g="45/256"  b="45/256"/>
-  <vis name="AnlDarkGreen"    alpha="1" r="0"       g="110/256" b="50/256"/>
-  <vis name="AnlDarkBlue"     alpha="1" r="45/256"   g="45/256"  b="110/256"/>
-  <vis name="AnlDelta_Red"    ref="AnlDarkRed"/>
-  <vis name="AnlDelta_Green"    ref="AnlDarkGreen"/>
-  <vis name="AnlDelta_Blue"    ref="AnlDarkBlue"/>
-
-  <vis name="GreenVis"       alpha="1.0"  r= "0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
-  <vis name="RedVis"         alpha="0.5"  r= "1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
-  <vis name="BlueVis"        alpha="0.5"  r= "0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
-  <vis name="OrangeVis"      alpha="1.0"  r= "1.0" g="0.45" b="0.0" showDaughters="true" visible="true"/>
-  <vis name="RedGreenVis"    alpha="0.5"  r= "1.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
-  <vis name="BlueGreenVis"   alpha="0.5"  r= "0.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
-  <vis name="PurpleVis"      alpha="0.5"  r= "1.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
-  <vis name="DoubleRedG"     alpha="0.5"  r= "2.0" g=".10" b="0.0" showDaughters="true" visible="true"/>
-  <vis name="RBG015"         alpha="0.5"  r= "0.0" g=".2"  b="1.0" showDaughters="true" visible="true"/>
-  <vis name="RBG510"         alpha="0.5"  r= "1.0" g=".2"  b="0.0" showDaughters="true" visible="true"/>
-  <vis name="RBG"            alpha="0.5"  r= "1.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
-  <vis name="SteelVis"       alpha="0.05"  r= "0.75" g="0.75" b="0.75" showDaughters="true" visible="true"/>
-  <vis name="GrayVis"        alpha="0.5"  r= "0.75" g="0.75" b="0.75" showDaughters="true" visible="true"/>
+  <vis name="aliceblue"               alpha="1" r="240/255" g="248/255" b="255/255" />
+  <vis name="antiquewhite"            alpha="1" r="250/255" g="235/255" b="215/255" />
+  <vis name="aqua"                    alpha="1" r="0/255"   g="255/255" b="255/255" />
+  <vis name="aquamarine"              alpha="1" r="127/255" g="255/255" b="212/255" />
+  <vis name="azure"                   alpha="1" r="240/255" g="255/255" b="255/255" />
+  <vis name="beige"                   alpha="1" r="245/255" g="245/255" b="220/255" />
+  <vis name="bisque"                  alpha="1" r="255/255" g="228/255" b="196/255" />
+  <vis name="black"                   alpha="1" r="0/255"   g="0/255"   b="0/255"   />
+  <vis name="blanchedalmond"          alpha="1" r="255/255" g="235/255" b="205/255" />
+  <vis name="blue"                    alpha="1" r="0/255"   g="0/255"   b="255/255" />
+  <vis name="blueviolet"              alpha="1" r="138/255" g="43/255"  b="226/255" />
+  <vis name="brown"                   alpha="1" r="165/255" g="42/255"  b="42/255"  />
+  <vis name="burlywood"               alpha="1" r="222/255" g="184/255" b="135/255" />
+  <vis name="cadetblue"               alpha="1" r="95/255"  g="158/255" b="160/255" />
+  <vis name="chartreuse"              alpha="1" r="127/255" g="255/255" b="0/255"   />
+  <vis name="chocolate"               alpha="1" r="210/255" g="105/255" b="30/255"  />
+  <vis name="coral"                   alpha="1" r="255/255" g="127/255" b="80/255"  />
+  <vis name="cornflowerblue"          alpha="1" r="100/255" g="149/255" b="237/255" />
+  <vis name="cornsilk"                alpha="1" r="255/255" g="248/255" b="220/255" />
+  <vis name="crimson"                 alpha="1" r="220/255" g="20/255"  b="60/255"  />
+  <vis name="cyan"                    alpha="1" r="0/255"   g="255/255" b="255/255" />
+  <vis name="darkblue"                alpha="1" r="0/255"   g="0/255"   b="139/255" />
+  <vis name="darkcyan"                alpha="1" r="0/255"   g="139/255" b="139/255" />
+  <vis name="darkgoldenrod"           alpha="1" r="184/255" g="134/255" b="11/255"  />
+  <vis name="darkgray"                alpha="1" r="169/255" g="169/255" b="169/255" />
+  <vis name="darkgreen"               alpha="1" r="0/255"   g="100/255" b="0/255"   />
+  <vis name="darkgrey"                alpha="1" r="169/255" g="169/255" b="169/255" />
+  <vis name="darkkhaki"               alpha="1" r="189/255" g="183/255" b="107/255" />
+  <vis name="darkmagenta"             alpha="1" r="139/255" g="0/255"   b="139/255" />
+  <vis name="darkolivegreen"          alpha="1" r="85/255"  g="107/255" b="47/255"  />
+  <vis name="darkorange"              alpha="1" r="255/255" g="140/255" b="0/255"   />
+  <vis name="darkorchid"              alpha="1" r="153/255" g="50/255"  b="204/255" />
+  <vis name="darkred"                 alpha="1" r="139/255" g="0/255"   b="0/255"   />
+  <vis name="darksalmon"              alpha="1" r="233/255" g="150/255" b="122/255" />
+  <vis name="darkseagreen"            alpha="1" r="143/255" g="188/255" b="143/255" />
+  <vis name="darkslateblue"           alpha="1" r="72/255"  g="61/255"  b="139/255" />
+  <vis name="darkslategray"           alpha="1" r="47/255"  g="79/255"  b="79/255"  />
+  <vis name="darkslategrey"           alpha="1" r="47/255"  g="79/255"  b="79/255"  />
+  <vis name="darkturquoise"           alpha="1" r="0/255"   g="206/255" b="209/255" />
+  <vis name="darkviolet"              alpha="1" r="148/255" g="0/255"   b="211/255" />
+  <vis name="deeppink"                alpha="1" r="255/255" g="20/255"  b="147/255" />
+  <vis name="deepskyblue"             alpha="1" r="0/255"   g="191/255" b="255/255" />
+  <vis name="dimgray"                 alpha="1" r="105/255" g="105/255" b="105/255" />
+  <vis name="dimgrey"                 alpha="1" r="105/255" g="105/255" b="105/255" />
+  <vis name="dodgerblue"              alpha="1" r="30/255"  g="144/255" b="255/255" />
+  <vis name="firebrick"               alpha="1" r="178/255" g="34/255"  b="34/255"  />
+  <vis name="floralwhite"             alpha="1" r="255/255" g="250/255" b="240/255" />
+  <vis name="forestgreen"             alpha="1" r="34/255"  g="139/255" b="34/255"  />
+  <vis name="fuchsia"                 alpha="1" r="255/255" g="0/255"   b="255/255" />
+  <vis name="gainsboro"               alpha="1" r="220/255" g="220/255" b="220/255" />
+  <vis name="ghostwhite"              alpha="1" r="248/255" g="248/255" b="255/255" />
+  <vis name="gold"                    alpha="1" r="255/255" g="215/255" b="0/255"   />
+  <vis name="goldenrod"               alpha="1" r="218/255" g="165/255" b="32/255"  />
+  <vis name="gray"                    alpha="1" r="128/255" g="128/255" b="128/255" />
+  <vis name="green"                   alpha="1" r="0/255"   g="128/255" b="0/255"   />
+  <vis name="greenyellow"             alpha="1" r="173/255" g="255/255" b="47/255"  />
+  <vis name="grey"                    alpha="1" r="128/255" g="128/255" b="128/255" />
+  <vis name="honeydew"                alpha="1" r="240/255" g="255/255" b="240/255" />
+  <vis name="hotpink"                 alpha="1" r="255/255" g="105/255" b="180/255" />
+  <vis name="indianred"               alpha="1" r="205/255" g="92/255"  b="92/255"  />
+  <vis name="indigo"                  alpha="1" r="75/255"  g="0/255"   b="130/255" />
+  <vis name="ivory"                   alpha="1" r="255/255" g="255/255" b="240/255" />
+  <vis name="khaki"                   alpha="1" r="240/255" g="230/255" b="140/255" />
+  <vis name="lavender"                alpha="1" r="230/255" g="230/255" b="250/255" />
+  <vis name="lavenderblush"           alpha="1" r="255/255" g="240/255" b="245/255" />
+  <vis name="lawngreen"               alpha="1" r="124/255" g="252/255" b="0/255"   />
+  <vis name="lemonchiffon"            alpha="1" r="255/255" g="250/255" b="205/255" />
+  <vis name="lightblue"               alpha="1" r="173/255" g="216/255" b="230/255" />
+  <vis name="lightcoral"              alpha="1" r="240/255" g="128/255" b="128/255" />
+  <vis name="lightcyan"               alpha="1" r="224/255" g="255/255" b="255/255" />
+  <vis name="lightgoldenrodyellow"    alpha="1" r="250/255" g="250/255" b="210/255" />
+  <vis name="lightgray"               alpha="1" r="211/255" g="211/255" b="211/255" />
+  <vis name="lightgreen"              alpha="1" r="144/255" g="238/255" b="144/255" />
+  <vis name="lightgrey"               alpha="1" r="211/255" g="211/255" b="211/255" />
+  <vis name="lightpink"               alpha="1" r="255/255" g="182/255" b="193/255" />
+  <vis name="lightsalmon"             alpha="1" r="255/255" g="160/255" b="122/255" />
+  <vis name="lightseagreen"           alpha="1" r="32/255"  g="178/255" b="170/255" />
+  <vis name="lightskyblue"            alpha="1" r="135/255" g="206/255" b="250/255" />
+  <vis name="lightslategray"          alpha="1" r="119/255" g="136/255" b="153/255" />
+  <vis name="lightslategrey"          alpha="1" r="119/255" g="136/255" b="153/255" />
+  <vis name="lightsteelblue"          alpha="1" r="176/255" g="196/255" b="222/255" />
+  <vis name="lightyellow"             alpha="1" r="255/255" g="255/255" b="224/255" />
+  <vis name="lime"                    alpha="1" r="0/255"   g="255/255" b="0/255"   />
+  <vis name="limegreen"               alpha="1" r="50/255"  g="205/255" b="50/255"  />
+  <vis name="linen"                   alpha="1" r="250/255" g="240/255" b="230/255" />
+  <vis name="magenta"                 alpha="1" r="255/255" g="0/255"   b="255/255" />
+  <vis name="maroon"                  alpha="1" r="128/255" g="0/255"   b="0/255"   />
+  <vis name="mediumaquamarine"        alpha="1" r="102/255" g="205/255" b="170/255" />
+  <vis name="mediumblue"              alpha="1" r="0/255"   g="0/255"   b="205/255" />
+  <vis name="mediumorchid"            alpha="1" r="186/255" g="85/255"  b="211/255" />
+  <vis name="mediumpurple"            alpha="1" r="147/255" g="112/255" b="219/255" />
+  <vis name="mediumseagreen"          alpha="1" r="60/255"  g="179/255" b="113/255" />
+  <vis name="mediumslateblue"         alpha="1" r="123/255" g="104/255" b="238/255" />
+  <vis name="mediumspringgreen"       alpha="1" r="0/255"   g="250/255" b="154/255" />
+  <vis name="mediumturquoise"         alpha="1" r="72/255"  g="209/255" b="204/255" />
+  <vis name="mediumvioletred"         alpha="1" r="199/255" g="21/255"  b="133/255" />
+  <vis name="midnightblue"            alpha="1" r="25/255"  g="25/255"  b="112/255" />
+  <vis name="mintcream"               alpha="1" r="245/255" g="255/255" b="250/255" />
+  <vis name="mistyrose"               alpha="1" r="255/255" g="228/255" b="225/255" />
+  <vis name="moccasin"                alpha="1" r="255/255" g="228/255" b="181/255" />
+  <vis name="navajowhite"             alpha="1" r="255/255" g="222/255" b="173/255" />
+  <vis name="navy"                    alpha="1" r="0/255"   g="0/255"   b="128/255" />
+  <vis name="oldlace"                 alpha="1" r="253/255" g="245/255" b="230/255" />
+  <vis name="olive"                   alpha="1" r="128/255" g="128/255" b="0/255"   />
+  <vis name="olivedrab"               alpha="1" r="107/255" g="142/255" b="35/255"  />
+  <vis name="orange"                  alpha="1" r="255/255" g="165/255" b="0/255"   />
+  <vis name="orangered"               alpha="1" r="255/255" g="69/255"  b="0/255"   />
+  <vis name="orchid"                  alpha="1" r="218/255" g="112/255" b="214/255" />
+  <vis name="palegoldenrod"           alpha="1" r="238/255" g="232/255" b="170/255" />
+  <vis name="palegreen"               alpha="1" r="152/255" g="251/255" b="152/255" />
+  <vis name="paleturquoise"           alpha="1" r="175/255" g="238/255" b="238/255" />
+  <vis name="palevioletred"           alpha="1" r="219/255" g="112/255" b="147/255" />
+  <vis name="papayawhip"              alpha="1" r="255/255" g="239/255" b="213/255" />
+  <vis name="peachpuff"               alpha="1" r="255/255" g="218/255" b="185/255" />
+  <vis name="peru"                    alpha="1" r="205/255" g="133/255" b="63/255"  />
+  <vis name="pink"                    alpha="1" r="255/255" g="192/255" b="203/255" />
+  <vis name="plum"                    alpha="1" r="221/255" g="160/255" b="221/255" />
+  <vis name="powderblue"              alpha="1" r="176/255" g="224/255" b="230/255" />
+  <vis name="purple"                  alpha="1" r="128/255" g="0/255"   b="128/255" />
+  <vis name="rebeccapurple"           alpha="1" r="102/255" g="51/255"  b="153/255" />
+  <vis name="red"                     alpha="1" r="255/255" g="0/255"   b="0/255"   />
+  <vis name="rosybrown"               alpha="1" r="188/255" g="143/255" b="143/255" />
+  <vis name="royalblue"               alpha="1" r="65/255"  g="105/255" b="225/255" />
+  <vis name="saddlebrown"             alpha="1" r="139/255" g="69/255"  b="19/255"  />
+  <vis name="salmon"                  alpha="1" r="250/255" g="128/255" b="114/255" />
+  <vis name="sandybrown"              alpha="1" r="244/255" g="164/255" b="96/255"  />
+  <vis name="seagreen"                alpha="1" r="46/255"  g="139/255" b="87/255"  />
+  <vis name="seashell"                alpha="1" r="255/255" g="245/255" b="238/255" />
+  <vis name="sienna"                  alpha="1" r="160/255" g="82/255"  b="45/255"  />
+  <vis name="silver"                  alpha="1" r="192/255" g="192/255" b="192/255" />
+  <vis name="skyblue"                 alpha="1" r="135/255" g="206/255" b="235/255" />
+  <vis name="slateblue"               alpha="1" r="106/255" g="90/255"  b="205/255" />
+  <vis name="slategray"               alpha="1" r="112/255" g="128/255" b="144/255" />
+  <vis name="slategrey"               alpha="1" r="112/255" g="128/255" b="144/255" />
+  <vis name="snow"                    alpha="1" r="255/255" g="250/255" b="250/255" />
+  <vis name="springgreen"             alpha="1" r="0/255"   g="255/255" b="127/255" />
+  <vis name="steelblue"               alpha="1" r="70/255"  g="130/255" b="180/255" />
+  <vis name="tan"                     alpha="1" r="210/255" g="180/255" b="140/255" />
+  <vis name="teal"                    alpha="1" r="0/255"   g="128/255" b="128/255" />
+  <vis name="thistle"                 alpha="1" r="216/255" g="191/255" b="216/255" />
+  <vis name="tomato"                  alpha="1" r="255/255" g="99/255"  b="71/255"  />
+  <vis name="turquoise"               alpha="1" r="64/255"  g="224/255" b="208/255" />
+  <vis name="violet"                  alpha="1" r="238/255" g="130/255" b="238/255" />
+  <vis name="wheat"                   alpha="1" r="245/255" g="222/255" b="179/255" />
+  <vis name="white"                   alpha="1" r="255/255" g="255/255" b="255/255" />
+  <vis name="whitesmoke"              alpha="1" r="245/255" g="245/255" b="245/255" />
+  <vis name="yellow"                  alpha="1" r="255/255" g="255/255" b="0/255"   />
+  <vis name="yellowgreen"             alpha="1" r="154/255" g="205/255" b="50/255"  />
 </display>

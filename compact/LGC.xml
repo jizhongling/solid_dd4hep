@@ -1,7 +1,7 @@
 <lccdd>
 
 <info name="LGC" title="Light Gas Cherenkov"
-  author="C. Peng"
+  author="Chao Peng"
   url="https://eicweb.phy.anl.gov/EIC/detectors/solid/-/blob/master/compact/LGC.xml"
   status="development"
   version="$Id: compact/LGC.xml v1.0 2024-05-18$">
@@ -88,11 +88,10 @@
   name="LightGasCherenkov"
   type="SoLID_GasCherenkov"
   readout="LightGasCherenkovHits"
-  numsides="24"
-  vis="RedVis">
+  numsides="24">
 
   <placement x="LGC_x" y="LGC_y" z0="LGC_z" />
-  <tank radiator="N2Optical">
+  <tank radiator="N2Optical" vis="LGCTankVis">
     <comment> snout </comment>
     <segment rmin1="48.7*cm" rmax1="120*cm" rmin2="59.7*cm" rmax2="130*cm" length="97*cm" />
     <segment rmin1="59.7*cm" rmax1="130*cm" rmin2="61.5*cm" rmax2="145*cm" length="16*cm" />
@@ -106,7 +105,7 @@
     mirror is the intersection between two spherical shell
   </comment>
   <mirrors>
-    <piece id="1" material="PyrexGlassOptical" surface="MirrorOpticalSurface">
+    <piece id="1" material="PyrexGlassOptical" surface="MirrorOpticalSurface" vis="LGCMirrorVis">
       <placement x="LGC_inner_shell_x" y="LGC_inner_shell_y" z="LGC_inner_shell_z - LGC_z"/>
       <shell rmin="LGC_inner_shell_rmin" rmax="LGC_inner_shell_rmax" theta0="0" dtheta="90*degree" phi0="0" dphi="360*degree"/>
       <wedge dx1="LGC_inner_wedge_dx1" dx2="LGC_inner_wedge_dx2"
@@ -114,7 +113,7 @@
         x="LGC_inner_wedge_x" y="LGC_inner_wedge_y" z="LGC_inner_wedge_z"
         rotx="90*degree" roty="0" rotz="0"/>
     </piece>
-    <piece id="2" material="PyrexGlassOptical" surface="MirrorOpticalSurface">
+    <piece id="2" material="PyrexGlassOptical" surface="MirrorOpticalSurface" vis="LGCMirrorVis">
       <placement x="LGC_outer_shell_x" y="LGC_outer_shell_y" z="LGC_outer_shell_z - LGC_z"/>
       <shell rmin="LGC_outer_shell_rmin" rmax="LGC_outer_shell_rmax" theta0="0" dtheta="90*degree" phi0="0" dphi="360*degree"/>
       <wedge dx1="LGC_outer_wedge_dx1" dx2="LGC_outer_wedge_dx2"
@@ -128,12 +127,12 @@
     Light Gas Cherenkov: Winston cones
   </comment>
   <winston_cone material="PyrexGlassOptical" surface="MirrorOpticalSurface">
-    <placement x="0*cm" y="240*cm" z="245*cm - LGC_z"/>
-    <rotation x="0" y="0" z="0"/>
+    <placement x="0*cm" y="240*cm" z="245*cm - LGC_z" />
+    <rotation x="65*degree" y="0" z="0" />
     <comment> TODO: implement PMT material layers </comment>
-    <pmt_array dx="16*cm" dy="16*cm" sensitive="yes"/>
-    <cone thickness="4*mm" rmin="7.0*cm" rmax="21.5*cm" length="30.*cm"/>
-    <shield material="Lead" thickness="1.*cm" radius="11.53*cm" length="15.*cm" shift_z="-1.66*cm"/>
+    <pmt_array dx="16*cm" dy="16*cm" sensitive="yes" vis="LGCPMTVis" />
+    <cone thickness="4*mm" rmin="7.0*cm" rmax="21.5*cm" length="30.*cm" vis="LGCConeVis" />
+    <shield material="Lead" thickness="1.*cm" radius="11.53*cm" length="8.*cm" shift_z="1.5*cm" vis="LGCShieldVis" />
   </winston_cone>
 </detector>
 <comment>
