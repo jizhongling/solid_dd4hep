@@ -32,92 +32,53 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // sensitive detector type
     sens.setType("tracker");
 
-    auto dims    = x_det.dimensions();
-    int  nsec    = dims.numsides();
-    auto x_rad   = x_det.child(_U(radiator));
-    auto rad_mat = desc.material(x_rad.attr<std::string>(_U(material)));
+    int  nsec    = x_det.numsides();
 
     xml_dim_t x_place = x_det.child(_U(placement));
     auto pos_x        = x_place.x();
     auto pos_y        = x_place.y();
     auto pos_z0       = x_place.z0();
 
-    // Everything that goes in the tank will be copies of the sector assembly volume
-    Assembly v_sector("cherenkov_sector");
-    DetElement de_sector("de_sector", 1);
-
-    // gas tank
+    // --------------
+    // Main tank
     // snout first
     std::vector<double> tank_lengths;
     std::vector<ConeSegment> tank_solids;
     // collect tank segments
-    auto x_tank = dims.child(_Unicode(segments)); 
+    auto x_tank = x_det.child(_Unicode(tank)); 
     for (xml_coll_t il(x_tank, _Unicode(segment)); il; ++il) {
         xml_dim_t idim = il;
         tank_solids.emplace_back(idim.length()/2., idim.rmin1(), idim.rmax1(), idim.rmin2(), idim.rmax2());
-	tank_lengths.push_back(idim.length());
+        tank_lengths.push_back(idim.length());
     }
+    // make a union solid out of the segments
     Volume v_tank;
-    // make a union solid out of it
+    auto rad_mat = desc.material(x_tank.attr<std::string>(_U(radiator)));
     // 0 size also include and will raise errors
     if (tank_solids.size() <= 1) {
-        v_tank = Volume("vol_gas_tank", tank_solids[0], rad_mat);
+        v_tank = Volume("v_gas_tank", tank_solids[0], rad_mat);
     } else {
-        double curr_length = tank_lengths[0] + tank_lengths[1];
-        UnionSolid tank_union(tank_solids[0], tank_solids[1], Position(0., 0., curr_length/2.));
-	for (size_t i = 2; i < tank_solids.size(); ++i) {
-            curr_length += tank_lengths[i];
-            tank_union = UnionSolid(tank_union, tank_solids[i], Position(0., 0., curr_length/2.));
+        UnionSolid tank_union(tank_solids[0], tank_solids[1], Position(0., 0., (tank_lengths[0] + tank_lengths[1])/2.));
+        double mid_length = tank_lengths[1];
+        for (size_t i = 2; i < tank_solids.size(); ++i) {
+            tank_union = UnionSolid(tank_union, tank_solids[i], Position(0., 0., (tank_lengths[0] + tank_lengths[i])/2. + mid_length));
+            mid_length += tank_lengths[i];
         }
-	v_tank = Volume("vol_gas_tank", tank_union, rad_mat);
+        v_tank = Volume("v_gas_tank", tank_union, rad_mat);
     }
-/*
-    ConeSegment tank_main(dims_tank.length()/2., dims_tank.rmin1(), dims_tank.rmax1(), dims_tank.rmin2(), dims_tank.rmax2());
-    ConeSegment tank_snout(dims_snout.length()/2., dims_snout.rmin1(), dims_snout.rmax1(), dims_snout.rmin2(), dims_snout.rmax2());
-    UnionSolid  tank_solid(tank_main,tank_snout,Position(0, 0, -(dims_tank.length() + dims_snout.length())/2.));
-    Volume      v_tank("vol_gas_tank", tank_solid, rad_mat);
-*/
     v_tank.setVisAttributes(desc, dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BlueVis"));
     Volume motherVol = desc.pickMotherVolume(det);
-    PlacedVolume envPV = motherVol.placeVolume(v_tank, Position(pos_x, pos_y, pos_z0 + tank_lengths[0]/2.));
+    // z value to shift the center of the envelope from its first segment's center to the very beginning
+    double shift_z = tank_lengths[0]/2.;
+    PlacedVolume envPV = motherVol.placeVolume(v_tank, Position(pos_x, pos_y, pos_z0 + shift_z));
     envPV.addPhysVolID("system", det_id);
     det.setPlacement(envPV);
 
-    // optical surface manager
-    OpticalSurfaceManager surfMgr = desc.surfaceManager();
-
-    // mirrors
-    auto x_mirrors = x_det.child(_Unicode(mirrors));
-    int i = 1;
-    for (xml_coll_t il(x_mirrors, _Unicode(piece)); il; ++il) {
-        xml_comp_t x_mir = il;
-        xml_dim_t mdim = x_mir.child(_U(dimensions));
-        xml_dim_t mloc = x_mir.child(_U(placement));
-        xml_dim_t mrot = x_mir.child(_U(rotation));
-        auto      mmat = desc.material(x_mir.materialStr());
-
-        Sphere mir_shell(mdim.radius(), mdim.radius() + mdim.thickness(), 0., M_PI/2.);
-        Trd1   mir_cutout(mdim.attr<double>(_Unicode(width1))/2., mdim.attr<double>(_Unicode(width2))/2.,
-                          mdim.length()/2., mdim.length()/2.);
-        auto   mir_trans = RotationX(M_PI/2.)*Transform3D(Position(0., 0., -mdim.radius()));
-
-        Volume v_mir("vol_mirror_" + std::to_string(i), IntersectionSolid(mir_cutout, mir_shell, mir_trans), mmat);
-        auto   mir_trans2 = Transform3D(Position(mloc.x(), mloc.y(), mloc.z()))*RotationZYX(mrot.z(), mrot.y(), mrot.x());
-        PlacedVolume pv_mir = v_sector.placeVolume(v_mir, mir_trans2);
-        DetElement de_mir(det, "de_mirror" + std::to_string(i), i);
-        pv_mir.addPhysVolID("mirror", i);
-        de_mir.setPlacement(pv_mir);
-        // v_mir.setSensitiveDetector(sens);
-
-        auto surface = surfMgr.opticalSurface(x_mir.attr<std::string>(_Unicode(surface)));
-
-        // optical surface
-        SkinSurface mirror_skin(desc, de_mir, "mirror_surface_" + std::to_string(i), surface, v_mir);
-        mirror_skin.isValid();
-        i++;
-    }
-
-    // sectors
+    // ---------------
+    // Sectors
+    // Everything that goes in the tank will be copies of the sector assembly volume
+    Assembly v_sector("cherenkov_sector");
+    DetElement de_sector("de_sector", 1);
     double sector_angle = 2.*M_PI / nsec;
     for (int isec = 1; isec <= nsec; isec++) {
         auto pv = v_tank.placeVolume(v_sector, Transform3D(RotationZ((isec - 1) * sector_angle)));
@@ -126,73 +87,110 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         amod.setPlacement(pv);
         det.add(amod);
     }
+    // optical surface manager
+    OpticalSurfaceManager surfMgr = desc.surfaceManager();
+
+    // ---------------
+    // Mirrors: intersection between a spherical shell and a trapezoid
+    auto x_mirs = x_det.child(_Unicode(mirrors));
+    for (xml_coll_t il(x_mirs, _Unicode(piece)); il; ++il) {
+        xml_comp_t x_mir = il;
+        auto       mid   = x_mir.id();
+        xml_dim_t  mpl   = x_mir.child(_U(placement));
+        auto       mmat  = desc.material(x_mir.materialStr());
+
+        // build spherical shell
+        xml_dim_t x_msph = x_mir.child(_Unicode(shell));
+        // front half, this is to help debugging visualization
+        Sphere mshell(x_msph.rmin(), x_msph.rmax(),
+            x_msph.attr<double>(_Unicode(theta0)), x_msph.attr<double>(_Unicode(dtheta)),
+            x_msph.attr<double>(_Unicode(phi0)), x_msph.attr<double>(_Unicode(dphi)));
+        // build trapezoid
+        xml_dim_t x_mtrd = x_mir.child(_Unicode(wedge));
+        Trd1 mwedge(x_mtrd.attr<double>(_Unicode(dx1)), x_mtrd.attr<double>(_Unicode(dx2)), x_mtrd.dy(), x_mtrd.dz());
+        auto mwedge_trans = Transform3D(Position(x_mtrd.x(), x_mtrd.y(), x_mtrd.z()))\
+                          * RotationZYX(x_mtrd.attr<double>(_Unicode(rotz)),
+                                        x_mtrd.attr<double>(_Unicode(roty)),
+                                        x_mtrd.attr<double>(_Unicode(rotz)));
+
+        // mirror volume
+        // use union to debug if intersection does not exist
+        // UnionSolid mir_solid(mshell, mwedge, mwedge_trans);
+        IntersectionSolid mir_solid(mshell, mwedge, mwedge_trans);
+        Volume            v_mir("v_mirror_" + std::to_string(mid), mir_solid, mmat);
+        PlacedVolume      pv_mir = v_sector.placeVolume(v_mir, Position(mpl.x(), mpl.y(), mpl.z() - shift_z));
+        DetElement        de_mir(det, "de_mirror_" + std::to_string(mid), mid);
+        de_mir.setPlacement(pv_mir);
+
+        // optical surface
+        auto msurf = surfMgr.opticalSurface(x_mir.attr<std::string>(_Unicode(surface)));
+        SkinSurface mirror_skin(desc, de_mir, "mirror_surface_" + std::to_string(mid), msurf, v_mir);
+        mirror_skin.isValid();
+    }
 
     // ---------------
     // Winston Cone 
     auto x_winston   = x_det.child(_Unicode(winston_cone));
     auto winston_mat = desc.material(x_winston.attr<std::string>(_Unicode(material)));
 
-    xml_dim_t wpl  = x_winston.child(_U(placement));
-    xml_dim_t wrot = x_winston.child(_U(rotation));
+    // build an assembly as its envelope
+    Assembly     winston_assem("winston_assembly");
+    xml_dim_t    wpl        = x_winston.child(_U(placement));
+    xml_dim_t    wrot       = x_winston.child(_U(rotation));
+    auto         wtrans     = Transform3D(Position(wpl.x(), wpl.y(), wpl.z() - shift_z))\
+                            * RotationZYX(wrot.z(), wrot.y(), wrot.x());
+    PlacedVolume pv_winston = v_sector.placeVolume(winston_assem, wtrans);
+    DetElement   de_winston(det, "de_winston_assembly", 1);
+    de_winston.setPlacement(pv_winston);
 
-    xml_dim_t cdims             = x_winston.child(_Unicode(cone_dimensions));
-    double    cone_thickness    = cdims.thickness();
-    double    cone_length       = cdims.attr<double>(_Unicode(length));
-    double    cone_radius1      = cdims.attr<double>(_Unicode(radius1));
-    double    cone_radius2      = cdims.attr<double>(_Unicode(radius2));
-    // double    cone_inset_length = cdims.attr<double>(_Unicode(inset_length));
+    // build pmt array (dummy sensitive surface at the assembly's center)
+    // TODO: implement realistic material layers
+    xml_comp_t x_pmt  = x_winston.child(_Unicode(pmt_array));
+    auto       pmt_dx = x_pmt.attr<double>(_Unicode(dx));
+    auto       pmt_dy = x_pmt.attr<double>(_Unicode(dy));
+    double     pmt_dz = 2.*mm;
+    DetElement de_pmt_array(det, "PMT_DE", 1);
+    Box        pmt_array(pmt_dx/2., pmt_dy/2., pmt_dz/2.);
+    Volume     v_pmt_array("v_pmt_array", pmt_array, winston_mat);
+    if (x_pmt.isSensitive()) {
+        v_pmt_array.setSensitiveDetector(sens);
+    }
+    PlacedVolume pv_pmt_array = winston_assem.placeVolume(v_pmt_array, Position(0., 0., 0.));
+    pv_pmt_array.addPhysVolID("module", 1);
+    de_pmt_array.setPlacement(pv_pmt_array);
 
-    xml_dim_t tdims       = x_winston.child(_Unicode(tube_dimensions));
-    double    tube_radius = tdims.radius();
-    double    tube_length = tdims.length();
+    // build cone (its end touches the PMT surface)
+    xml_dim_t x_cone            = x_winston.child(_Unicode(cone));
+    double    cone_thickness    = x_cone.thickness();
+    double    cone_length       = x_cone.length();
+    double    cone_radius1      = x_cone.rmin();
+    double    cone_radius2      = x_cone.rmax();
 
-    DetElement       de_winston_cone(det, "de_winston_cone1", 1);
-    Tube             winston_tube(tube_radius, tube_radius + cone_thickness, tube_length / 2.0);
+    DetElement       de_winston_cone(det, "de_winston_cone", 1);
     Paraboloid       winston_cone1(cone_radius1 + cone_thickness, cone_radius2 + cone_thickness, cone_length / 2.0 );
-    Paraboloid       winston_cone2(cone_radius1, cone_radius2, cone_length / 2.0 );
-    SubtractionSolid winston_cone(winston_cone1, winston_cone2);
+    Paraboloid       winston_cone2(cone_radius1, cone_radius2, cone_length / 2.0 + 0.1*mm );
+    SubtractionSolid winston_cone_solid(winston_cone1, winston_cone2);
+    Volume           v_winston_cone("v_winston_cone", winston_cone_solid, winston_mat);
+    PlacedVolume     pv_winston_cone = winston_assem.placeVolume(v_winston_cone, Position(0., 0., (cone_length + pmt_dz)/2.));
+    de_winston_cone.setPlacement(pv_winston_cone);
 
-    Volume v_winston_cone_solid("v_winston_cone_solid", winston_cone, winston_mat);
-    PlacedVolume pv_winston_cone_solid = v_sector.placeVolume(
-        v_winston_cone_solid, Transform3D(Position(wpl.x(), wpl.y(), wpl.z())) *
-                       RotationZYX(wrot.z(), wrot.y(), wrot.x()) *
-                       Transform3D(Position(0, 0, tube_length / 2.0 + 5.0 * mm)));
-    de_winston_cone.setPlacement(pv_winston_cone_solid);
     // optical surface
-    auto surface = surfMgr.opticalSurface(x_winston.attr<std::string>(_Unicode(surface)));
-    SkinSurface winston_skin(desc, de_winston_cone, "winston_surface", surface, v_winston_cone_solid);
+    auto wsurf = surfMgr.opticalSurface(x_winston.attr<std::string>(_Unicode(surface)));
+    SkinSurface winston_skin(desc, de_winston_cone, "winston_surface", wsurf, v_winston_cone);
     winston_skin.isValid();
 
-    // ---------------
-    // Dummy PMT surface
-    auto x_pmt = x_det.child(_Unicode(pmt_array));
-    xml_dim_t dims_pmt = x_pmt.child(_Unicode(dimensions));
-    auto      pmt_x    = dims_pmt.x();
-    auto      pmt_y    = dims_pmt.y();
-    auto      pmt_surf = surfMgr.opticalSurface(x_pmt.attr<std::string>(_Unicode(surface)));
+    // build shield
+    // double    cone_inset_length = cdims.attr<double>(_Unicode(inset_length));
+    xml_dim_t x_shield      = x_winston.child(_Unicode(shield));
+    double    shield_rmin   = x_shield.radius();
+    double    shield_rmax   = shield_rmin + x_shield.thickness();
+    double    shield_length = x_shield.length();
+    auto      shield_mat    = desc.material(x_shield.attr<std::string>(_Unicode(material)));
+    Tube      winston_shield_solid(shield_rmin, shield_rmax, shield_length / 2.0);
+    Volume    v_winston_shield("v_winston_shield", winston_shield_solid, shield_mat);
+    // wrapping around PMT
+    winston_assem.placeVolume(v_winston_shield, Position(0., 0., x_shield.attr<double>(_Unicode(shift_z))));
 
-    DetElement   de_pmt_array(det, "PMT_DE", 1);
-    Box          pmt_array(pmt_x/2., pmt_y/2., 5 * mm / 2.0);
-    Volume       v_pmt_array("v_pmt_array", pmt_array, rad_mat);
-    PlacedVolume pv_pmt_array =
-        v_sector.placeVolume(v_pmt_array, Transform3D(Position(wpl.x(), wpl.y(), wpl.z())) *
-                                          RotationZYX(wrot.z(), wrot.y(), wrot.x()));
-
-    pv_pmt_array.addPhysVolID("mirror", 3);
-    de_pmt_array.setPlacement(pv_pmt_array);
-    v_pmt_array.setSensitiveDetector(sens);
-    // optical surface
-    SkinSurface pmt_skin(desc, de_pmt_array, "LGCPMTsurface", pmt_surf, v_pmt_array);
-    pmt_skin.isValid();
-
-    /*
-    // copper layer inside to stop photons
-    Box  pmt_array_backing(pmt_x/2., pmt_y/2., 1*mm/2.0);
-    auto Copper = desc.material("Copper");
-    Volume v_pmt_array_backing("v_pmt_array_backing", pmt_array_backing, Copper);
-    // PlacedVolume pv_pmt_array_backing = 
-    v_pmt_array.placeVolume(v_pmt_array_backing, Position(0,0,0));
-    */
     return det;
 }
 //@}

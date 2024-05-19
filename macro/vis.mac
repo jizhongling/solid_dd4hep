@@ -16,7 +16,7 @@
 
 /vis/viewer/flush
 
-/run/beamOn 1
+# /run/beamOn 1
 
 #/control/execute macro/gun.mac
 
