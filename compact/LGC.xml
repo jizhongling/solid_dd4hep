@@ -8,12 +8,14 @@
   <comment>SoLID Light Gas Cherenkov Detector</comment>
 </info>
 
+
 <readouts>
   <readout name="LightGasCherenkovHits">
     <segmentation type="CartesianGridXY" grid_size_x="3*mm" grid_size_y="3*mm" />
     <id>system:6,sector:12,module:14,x:32:-16,y:-16</id>
   </readout>
 </readouts>
+
 
 <define>
   <comment>
@@ -24,21 +26,51 @@
   <constant name="LGC_z" value="97.0*cm" />
 
   <comment>
-    a list of constants from the LGC geometry table to help build mirror geometry
-    the mirror is built by intersection between a spherical shell and a trapezoid (wedge)
+    tank geometry constants
+  </comment>
+  <constant name="LGC_seg1_length" value="97*cm" />
+  <constant name="LGC_seg1_rmin1"  value="48.7*cm" />
+  <constant name="LGC_seg1_rmax1"  value="120.*cm" />
+  <constant name="LGC_seg1_rmin2"  value="59.7*cm" />
+  <constant name="LGC_seg1_rmax2"  value="130.*cm" />
+
+  <constant name="LGC_seg2_length" value="16*cm" />
+  <constant name="LGC_seg2_rmin1"  value="59.7*cm" />
+  <constant name="LGC_seg2_rmax1"  value="130.*cm" />
+  <constant name="LGC_seg2_rmin2"  value="61.5*cm" />
+  <constant name="LGC_seg2_rmax2"  value="145.*cm" />
+
+  <constant name="LGC_seg3_length" value="22*cm" />
+  <constant name="LGC_seg3_rmin1"  value="61.5*cm" />
+  <constant name="LGC_seg3_rmax1"  value="145.*cm" />
+  <constant name="LGC_seg3_rmin2"  value="63.4*cm" />
+  <constant name="LGC_seg3_rmax2"  value="163.*cm" />
+
+  <constant name="LGC_seg4_length" value="80*cm" />
+  <constant name="LGC_seg4_rmin1"  value="63.4*cm" />
+  <constant name="LGC_seg4_rmax1"  value="263.*cm" />
+  <constant name="LGC_seg4_rmin2"  value="73.2*cm" />
+  <constant name="LGC_seg4_rmax2"  value="263.*cm" />
+
+  <constant name="LGC_wall"     value="4*mm" />
+  <constant name="LGC_entrance" value="4*mm" />
+  <constant name="LGC_exit"     value="4*mm" />
+
+  <comment>
+    mirror geometry constants: the mirror is built by intersection between a spherical shell and a trapezoid (wedge)
     note these coordinates are in world volume, the geometry plugin is supposed to transform them to the Cherenkov volume coordinates
   </comment>
   <constant name="LGC_inner_shell_rmin" value="299.15*cm" />
   <constant name="LGC_inner_shell_rmax" value="299.45*cm" />
-  <constant name="LGC_inner_shell_x" value="0.*cm" />
-  <constant name="LGC_inner_shell_y" value="274.7*cm" />
-  <constant name="LGC_inner_shell_z" value="24.9*cm" />
+  <constant name="LGC_inner_shell_x"    value="0.*cm" />
+  <constant name="LGC_inner_shell_y"    value="274.7*cm" />
+  <constant name="LGC_inner_shell_z"    value="24.9*cm" />
 
   <constant name="LGC_outer_shell_rmin" value="160.09*cm" />
   <constant name="LGC_outer_shell_rmax" value="160.39*cm" />
-  <constant name="LGC_outer_shell_x" value="0.*cm" />
-  <constant name="LGC_outer_shell_y" value="200.86*cm" />
-  <constant name="LGC_outer_shell_z" value="143.06*cm" />
+  <constant name="LGC_outer_shell_x"    value="0.*cm" />
+  <constant name="LGC_outer_shell_y"    value="200.86*cm" />
+  <constant name="LGC_outer_shell_z"    value="143.06*cm" />
 
   <comment>
     wedge corner coordinates
@@ -62,22 +94,23 @@
   <comment>
     dimension calculations (position is relative to the shell)
   </comment>
-  <constant name="LGC_inner_wedge_dx1" value="abs(LGC_inner_wedge_P4_x)" />
-  <constant name="LGC_inner_wedge_dx2" value="abs(LGC_inner_wedge_P2_x)" />
-  <constant name="LGC_inner_wedge_dy"  value="abs(LGC_inner_wedge_P2_y - LGC_inner_wedge_P4_y)/2." />
-  <constant name="LGC_inner_wedge_dz"  value="abs(LGC_inner_wedge_P2_z - LGC_inner_wedge_P4_z)/2. + 10*cm" />
-  <constant name="LGC_inner_wedge_x"   value="0. - LGC_inner_shell_x" />
-  <constant name="LGC_inner_wedge_y"   value="(LGC_inner_wedge_P2_y + LGC_inner_wedge_P4_y)/2. - LGC_inner_shell_y"/>
-  <constant name="LGC_inner_wedge_z"   value="(LGC_inner_wedge_P2_z + LGC_inner_wedge_P4_z)/2. - LGC_inner_shell_z"/>
+  <constant name="LGC_inner_wedge_dx1"  value="abs(LGC_inner_wedge_P4_x)" />
+  <constant name="LGC_inner_wedge_dx2"  value="abs(LGC_inner_wedge_P2_x)" />
+  <constant name="LGC_inner_wedge_dy"   value="abs(LGC_inner_wedge_P2_y - LGC_inner_wedge_P4_y)/2." />
+  <constant name="LGC_inner_wedge_dz"   value="abs(LGC_inner_wedge_P2_z - LGC_inner_wedge_P4_z)/2. + 10*cm" />
+  <constant name="LGC_inner_wedge_x"    value="0. - LGC_inner_shell_x" />
+  <constant name="LGC_inner_wedge_y"    value="(LGC_inner_wedge_P2_y + LGC_inner_wedge_P4_y)/2. - LGC_inner_shell_y"/>
+  <constant name="LGC_inner_wedge_z"    value="(LGC_inner_wedge_P2_z + LGC_inner_wedge_P4_z)/2. - LGC_inner_shell_z"/>
 
-  <constant name="LGC_outer_wedge_dx1" value="abs(LGC_outer_wedge_P4_x)" />
-  <constant name="LGC_outer_wedge_dx2" value="abs(LGC_outer_wedge_P2_x)" />
-  <constant name="LGC_outer_wedge_dy"  value="abs(LGC_outer_wedge_P2_y - LGC_outer_wedge_P4_y)/2." />
-  <constant name="LGC_outer_wedge_dz"  value="abs(LGC_outer_wedge_P2_z - LGC_outer_wedge_P4_z)/2. + 10*cm" />
-  <constant name="LGC_outer_wedge_x"   value="0. - LGC_outer_shell_x" />
-  <constant name="LGC_outer_wedge_y"   value="(LGC_outer_wedge_P2_y + LGC_outer_wedge_P4_y)/2. - LGC_outer_shell_y"/>
-  <constant name="LGC_outer_wedge_z"   value="(LGC_outer_wedge_P2_z + LGC_outer_wedge_P4_z)/2. - LGC_outer_shell_z"/>
+  <constant name="LGC_outer_wedge_dx1"  value="abs(LGC_outer_wedge_P4_x)" />
+  <constant name="LGC_outer_wedge_dx2"  value="abs(LGC_outer_wedge_P2_x)" />
+  <constant name="LGC_outer_wedge_dy"   value="abs(LGC_outer_wedge_P2_y - LGC_outer_wedge_P4_y)/2." />
+  <constant name="LGC_outer_wedge_dz"   value="abs(LGC_outer_wedge_P2_z - LGC_outer_wedge_P4_z)/2. + 10*cm" />
+  <constant name="LGC_outer_wedge_x"    value="0. - LGC_outer_shell_x" />
+  <constant name="LGC_outer_wedge_y"    value="(LGC_outer_wedge_P2_y + LGC_outer_wedge_P4_y)/2. - LGC_outer_shell_y"/>
+  <constant name="LGC_outer_wedge_z"    value="(LGC_outer_wedge_P2_z + LGC_outer_wedge_P4_z)/2. - LGC_outer_shell_z"/>
 </define>
+
 
 <detectors>
 <comment>
@@ -91,13 +124,37 @@
   numsides="24">
 
   <placement x="LGC_x" y="LGC_y" z0="LGC_z" />
-  <tank radiator="N2Optical" vis="LGCTankVis">
-    <comment> snout </comment>
-    <segment rmin1="48.7*cm" rmax1="120*cm" rmin2="59.7*cm" rmax2="130*cm" length="97*cm" />
-    <segment rmin1="59.7*cm" rmax1="130*cm" rmin2="61.5*cm" rmax2="145*cm" length="16*cm" />
-    <segment rmin1="61.5*cm" rmax1="145*cm" rmin2="63.4*cm" rmax2="163*cm" length="22*cm" />
-    <comment> tank </comment>
-    <segment rmin1="63.4*cm" rmax1="263*cm" rmin2="73.2*cm" rmax2="263*cm" length="80*cm" />
+  <tank material="Kapton" vis="LGCTankVis">
+    <segment length="LGC_seg1_length"
+      rmin1="LGC_seg1_rmin1" rmax1="LGC_seg1_rmax1"
+      rmin2="LGC_seg1_rmin2" rmax2="LGC_seg1_rmax2" />
+    <segment length="LGC_seg2_length"
+      rmin1="LGC_seg2_rmin1" rmax1="LGC_seg2_rmax1"
+      rmin2="LGC_seg2_rmin2" rmax2="LGC_seg2_rmax2" />
+    <segment length="LGC_seg3_length"
+      rmin1="LGC_seg3_rmin1" rmax1="LGC_seg3_rmax1"
+      rmin2="LGC_seg3_rmin2" rmax2="LGC_seg3_rmax2" />
+    <segment length="LGC_seg4_length"
+      rmin1="LGC_seg4_rmin1" rmax1="LGC_seg4_rmax1"
+      rmin2="LGC_seg4_rmin2" rmax2="LGC_seg4_rmax2" />
+    <radiator material="N2Optical" vis="LGCGasVis">
+      <comment>
+        radiator is the daugter of tank, using the same segments but with wall thickness
+      </comment>
+      <placement x="0." y="0." z="LGC_entrance/2." />
+      <segment length="LGC_seg1_length - LGC_entrance"
+        rmin1="LGC_seg1_rmin1 + LGC_wall" rmax1="LGC_seg1_rmax1 - LGC_wall"
+        rmin2="LGC_seg1_rmin2 + LGC_wall" rmax2="LGC_seg1_rmax2 - LGC_wall" />
+      <segment length="LGC_seg2_length"
+        rmin1="LGC_seg2_rmin1 + LGC_wall" rmax1="LGC_seg2_rmax1 - LGC_wall"
+        rmin2="LGC_seg2_rmin2 + LGC_wall" rmax2="LGC_seg2_rmax2 - LGC_wall" />
+      <segment length="LGC_seg3_length"
+        rmin1="LGC_seg3_rmin1 + LGC_wall" rmax1="LGC_seg3_rmax1 - LGC_wall"
+        rmin2="LGC_seg3_rmin2 + LGC_wall" rmax2="LGC_seg3_rmax2 - LGC_wall" />
+      <segment length="LGC_seg4_length - LGC_exit"
+        rmin1="LGC_seg4_rmin1 + LGC_wall" rmax1="LGC_seg4_rmax1 - LGC_wall"
+        rmin2="LGC_seg4_rmin2 + LGC_wall" rmax2="LGC_seg4_rmax2 - LGC_wall" />
+    </radiator>
   </tank>
 
   <comment>

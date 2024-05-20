@@ -16,7 +16,7 @@ using namespace dd4hep::rec;
 // A helper function to build stacked cone segments
 // set solid and material into <vol>
 // return the distance between (in z) the starting point and the volume center
-double stackConeSegments(Detector &desc, xml_comp_t x_comp, Volume &vol)
+double stackConeSegments(Volume &vol, xml_comp_t x_comp, const Material &mat)
 {
     // store solids and their lengths
     std::vector<double> lengths;
@@ -41,7 +41,6 @@ double stackConeSegments(Detector &desc, xml_comp_t x_comp, Volume &vol)
         }
         vol.setSolid(segs_union);
     }
-    auto mat = desc.material(x_comp.attr<std::string>(_U(radiator)));
     vol.setMaterial(mat);
     // we use the first segment as the center solid
     return lengths[0]/2.;
@@ -68,14 +67,26 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // Main tank
     // build from stacking conesegments
     auto x_tank = x_det.child(_Unicode(tank)); 
-    Volume v_tank("v_gas_tank");
-    double shift_z = stackConeSegments(desc, x_tank, v_tank);
+    Volume v_tank("v_tank");
+    // using tank center (z) as the center point for all following volumes
+    double shift_z = stackConeSegments(v_tank, x_tank, desc.material(x_tank.attr<std::string>(_Unicode(material))));
     v_tank.setVisAttributes(desc, x_tank.attr<std::string>(_Unicode(vis)));
+
     Volume motherVol = desc.pickMotherVolume(det);
-    // z value to shift the center of the envelope from its first segment's center to the very beginning
     PlacedVolume envPV = motherVol.placeVolume(v_tank, Position(pos_x, pos_y, pos_z0 + shift_z));
     envPV.addPhysVolID("system", det_id);
     det.setPlacement(envPV);
+
+    // build the radiator inside tank
+    auto x_rad = x_tank.child(_Unicode(radiator));
+    Volume v_rad("v_gas_radiator");
+    // build radiator volume
+    stackConeSegments(v_rad, x_rad, desc.material(x_rad.attr<std::string>(_Unicode(material))));
+    v_rad.setVisAttributes(desc, x_rad.attr<std::string>(_Unicode(vis)));
+    xml_dim_t rpl = x_rad.child(_U(placement));
+    v_tank.placeVolume(v_rad, Position(rpl.x(), rpl.y(), rpl.z()));
+    // shift from radiator center to the detector z0
+    shift_z += rpl.z();
 
     // ---------------
     // Sectors
@@ -84,7 +95,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     DetElement de_sector("de_sector", 1);
     double sector_angle = 2.*M_PI / nsec;
     for (int isec = 1; isec <= nsec; isec++) {
-        auto pv = v_tank.placeVolume(v_sector, Transform3D(RotationZ((isec - 1) * sector_angle)));
+        auto pv = v_rad.placeVolume(v_sector, Transform3D(RotationZ((isec - 1) * sector_angle)));
         pv.addPhysVolID("sector", isec);
         auto amod = (isec == 1 ? de_sector : de_sector.clone("de_sector" + std::to_string(isec), isec));
         amod.setPlacement(pv);

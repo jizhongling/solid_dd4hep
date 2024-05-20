@@ -13,7 +13,8 @@
     <comment>
       Light Gas Cherenkov Visualizations
     </comment>
-    <vis name="LGCTankVis"   ref="orange"        visible="true" showDaughters="true" alpha="0.3" />
+    <vis name="LGCTankVis"   ref="forestgreen"   visible="true" showDaughters="true" alpha="0.6" />
+    <vis name="LGCGasVis"    ref="orange"        visible="true" showDaughters="true" alpha="0.1" />
     <vis name="LGCMirrorVis" ref="silver"        visible="true" showDaughters="true" alpha="0.6" />
     <vis name="LGCConeVis"   ref="silver"        visible="true" showDaughters="true" alpha="0.6" />
     <vis name="LGCPMTVis"    ref="saddlebrown"   visible="true" showDaughters="true" alpha="0.6" />
