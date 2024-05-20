@@ -1,7 +1,7 @@
 /vis/open OGL 800x800-0+0
 
 /vis/drawVolume
-/vis/viewer/set/viewpointThetaPhi 30 30
+/vis/viewer/set/viewpointThetaPhi -135 -45
 #/vis/viewer/zoom 30.
 #/vis/viewer/set/style wireframe
 #/vis/scene/add/axes 0 0 0 1 m

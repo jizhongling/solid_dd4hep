@@ -13,6 +13,41 @@
 using namespace dd4hep;
 using namespace dd4hep::rec;
 
+// A helper function to build stacked cone segments
+// set solid and material into <vol>
+// return the distance between (in z) the starting point and the volume center
+double stackConeSegments(Detector &desc, xml_comp_t x_comp, Volume &vol)
+{
+    // store solids and their lengths
+    std::vector<double> lengths;
+    std::vector<ConeSegment> conesegs;
+
+    // collect cone segments
+    for (xml_coll_t il(x_comp, _Unicode(segment)); il; ++il) {
+        xml_dim_t idim = il;
+        conesegs.emplace_back(idim.length()/2., idim.rmin1(), idim.rmax1(), idim.rmin2(), idim.rmax2());
+        lengths.push_back(idim.length());
+    }
+    // make a union solid out of the segments
+    // 0 size also include and will raise errors
+    if (conesegs.size() <= 1) {
+        vol.setSolid(conesegs[0]);
+    } else {
+        UnionSolid segs_union(conesegs[0], conesegs[1], Position(0., 0., (lengths[0] + lengths[1])/2.));
+        double mid_length = lengths[1];
+        for (size_t i = 2; i < conesegs.size(); ++i) {
+            segs_union = UnionSolid(segs_union, conesegs[i], Position(0., 0., (lengths[0] + lengths[i])/2. + mid_length));
+            mid_length += lengths[i];
+        }
+        vol.setSolid(segs_union);
+    }
+    auto mat = desc.material(x_comp.attr<std::string>(_U(radiator)));
+    vol.setMaterial(mat);
+    // we use the first segment as the center solid
+    return lengths[0]/2.;
+}
+
+// main geometry builder
 static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetector sens)
 {
     xml::DetElement x_det    = handle;
@@ -31,35 +66,13 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // --------------
     // Main tank
-    // snout first
-    std::vector<double> tank_lengths;
-    std::vector<ConeSegment> tank_solids;
-    // collect tank segments
+    // build from stacking conesegments
     auto x_tank = x_det.child(_Unicode(tank)); 
-    for (xml_coll_t il(x_tank, _Unicode(segment)); il; ++il) {
-        xml_dim_t idim = il;
-        tank_solids.emplace_back(idim.length()/2., idim.rmin1(), idim.rmax1(), idim.rmin2(), idim.rmax2());
-        tank_lengths.push_back(idim.length());
-    }
-    // make a union solid out of the segments
-    Volume v_tank;
-    auto rad_mat = desc.material(x_tank.attr<std::string>(_U(radiator)));
-    // 0 size also include and will raise errors
-    if (tank_solids.size() <= 1) {
-        v_tank = Volume("v_gas_tank", tank_solids[0], rad_mat);
-    } else {
-        UnionSolid tank_union(tank_solids[0], tank_solids[1], Position(0., 0., (tank_lengths[0] + tank_lengths[1])/2.));
-        double mid_length = tank_lengths[1];
-        for (size_t i = 2; i < tank_solids.size(); ++i) {
-            tank_union = UnionSolid(tank_union, tank_solids[i], Position(0., 0., (tank_lengths[0] + tank_lengths[i])/2. + mid_length));
-            mid_length += tank_lengths[i];
-        }
-        v_tank = Volume("v_gas_tank", tank_union, rad_mat);
-    }
+    Volume v_tank("v_gas_tank");
+    double shift_z = stackConeSegments(desc, x_tank, v_tank);
     v_tank.setVisAttributes(desc, x_tank.attr<std::string>(_Unicode(vis)));
     Volume motherVol = desc.pickMotherVolume(det);
     // z value to shift the center of the envelope from its first segment's center to the very beginning
-    double shift_z = tank_lengths[0]/2.;
     PlacedVolume envPV = motherVol.placeVolume(v_tank, Position(pos_x, pos_y, pos_z0 + shift_z));
     envPV.addPhysVolID("system", det_id);
     det.setPlacement(envPV);
