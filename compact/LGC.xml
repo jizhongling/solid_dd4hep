@@ -122,8 +122,8 @@
   type="SoLID_GasCherenkov"
   readout="LightGasCherenkovHits"
   numsides="24">
-
   <placement x="LGC_x" y="LGC_y" z0="LGC_z" />
+
   <tank material="Kapton" vis="LGCTankVis">
     <segment length="LGC_seg1_length"
       rmin1="LGC_seg1_rmin1" rmax1="LGC_seg1_rmax1"
@@ -164,7 +164,8 @@
   <mirrors>
     <piece id="1" material="PyrexGlassOptical" surface="MirrorOpticalSurface" vis="LGCMirrorVis">
       <placement x="LGC_inner_shell_x" y="LGC_inner_shell_y" z="LGC_inner_shell_z - LGC_z"/>
-      <shell rmin="LGC_inner_shell_rmin" rmax="LGC_inner_shell_rmax" theta0="0" dtheta="90*degree" phi0="0" dphi="360*degree"/>
+      <shell rmin="LGC_inner_shell_rmin" rmax="LGC_inner_shell_rmax"
+        theta0="0" dtheta="90*degree" phi0="0" dphi="360*degree"/>
       <wedge dx1="LGC_inner_wedge_dx1" dx2="LGC_inner_wedge_dx2"
         dy="LGC_inner_wedge_dy" dz="LGC_inner_wedge_dz"
         x="LGC_inner_wedge_x" y="LGC_inner_wedge_y" z="LGC_inner_wedge_z"
@@ -172,7 +173,8 @@
     </piece>
     <piece id="2" material="PyrexGlassOptical" surface="MirrorOpticalSurface" vis="LGCMirrorVis">
       <placement x="LGC_outer_shell_x" y="LGC_outer_shell_y" z="LGC_outer_shell_z - LGC_z"/>
-      <shell rmin="LGC_outer_shell_rmin" rmax="LGC_outer_shell_rmax" theta0="0" dtheta="90*degree" phi0="0" dphi="360*degree"/>
+      <shell rmin="LGC_outer_shell_rmin" rmax="LGC_outer_shell_rmax"
+        theta0="0" dtheta="90*degree" phi0="0" dphi="360*degree"/>
       <wedge dx1="LGC_outer_wedge_dx1" dx2="LGC_outer_wedge_dx2"
         dy="LGC_outer_wedge_dy" dz="LGC_outer_wedge_dz"
         x="LGC_outer_wedge_x" y="LGC_outer_wedge_y" z="LGC_outer_wedge_z"
@@ -189,7 +191,8 @@
     <comment> TODO: implement PMT material layers </comment>
     <pmt_array dx="16*cm" dy="16*cm" sensitive="yes" vis="LGCPMTVis" />
     <cone thickness="4*mm" rmin="7.0*cm" rmax="21.5*cm" length="30.*cm" vis="LGCConeVis" />
-    <shield material="Lead" thickness="1.*cm" radius="11.53*cm" length="8.*cm" shift_z="1.5*cm" vis="LGCShieldVis" />
+    <shield material="Lead" thickness="1.*cm" radius="11.53*cm" length="8.*cm"
+      shift_z="1.5*cm" vis="LGCShieldVis" />
   </winston_cone>
 </detector>
 <comment>
