@@ -137,7 +137,7 @@
     <segment length="LGC_seg4_length"
       rmin1="LGC_seg4_rmin1" rmax1="LGC_seg4_rmax1"
       rmin2="LGC_seg4_rmin2" rmax2="LGC_seg4_rmax2" />
-    <radiator material="N2Optical" vis="LGCGasVis">
+    <radiator material="CO2Optical" vis="LGCGasVis">
       <comment>
         radiator is the daugter of tank, using the same segments but with wall thickness
       </comment>

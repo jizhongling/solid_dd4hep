@@ -20,6 +20,29 @@
       4.0*eV 1.00033
       5.1*eV 1.00033
       "/>
+    <matrix name="RINDEX__CO2" coldim="2" values = "
+      0.750*eV 1.0004374
+      1.050*eV 1.0004409
+      1.350*eV 1.0004432
+      1.650*eV 1.0004453
+      1.950*eV 1.0004476
+      2.250*eV 1.0004501
+      2.550*eV 1.0004530
+      2.850*eV 1.0004562
+      3.150*eV 1.0004599
+      3.450*eV 1.0004639
+      3.750*eV 1.0004684
+      4.050*eV 1.0004733
+      4.350*eV 1.0004788
+      4.650*eV 1.0004847
+      4.950*eV 1.0004913
+      5.250*eV 1.0004985
+      5.550*eV 1.0005064
+      5.850*eV 1.0005150
+      6.150*eV 1.0005245
+      6.450*eV 1.0005350
+      6.750*eV 1.0005465
+    "/>
     <matrix name="RINDEX__Pyrex" coldim="2" values="
       1.0*eV 1.5
       4.0*eV 1.5
@@ -103,6 +126,12 @@
       <D type="density" value="0.00125" unit="g/cm3"/>
       <composite n="1" ref="N"/>
       <property name="RINDEX"  ref="RINDEX__N2"/>
+    </material>
+    <material name="CO2Optical">
+      <D type="density" value="0.00184205" unit="g/cm3"/>
+      <composite n="1" ref="C"/>
+      <composite n="2" ref="O"/>
+      <property name="RINDEX" ref="RINDEX__CO2"/>
     </material>
     <material name="PyrexGlassOptical">
       <D type="density" value="2.23" unit="g/cm3"/>
