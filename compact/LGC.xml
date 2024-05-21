@@ -148,10 +148,10 @@
       <segment length="LGC_seg2_length"
         rmin1="LGC_seg2_rmin1 + LGC_wall" rmax1="LGC_seg2_rmax1 - LGC_wall"
         rmin2="LGC_seg2_rmin2 + LGC_wall" rmax2="LGC_seg2_rmax2 - LGC_wall" />
-      <segment length="LGC_seg3_length"
+      <segment length="LGC_seg3_length + LGC_exit"
         rmin1="LGC_seg3_rmin1 + LGC_wall" rmax1="LGC_seg3_rmax1 - LGC_wall"
         rmin2="LGC_seg3_rmin2 + LGC_wall" rmax2="LGC_seg3_rmax2 - LGC_wall" />
-      <segment length="LGC_seg4_length - LGC_exit"
+      <segment length="LGC_seg4_length - 2*LGC_exit"
         rmin1="LGC_seg4_rmin1 + LGC_wall" rmax1="LGC_seg4_rmax1 - LGC_wall"
         rmin2="LGC_seg4_rmin2 + LGC_wall" rmax2="LGC_seg4_rmax2 - LGC_wall" />
     </radiator>
