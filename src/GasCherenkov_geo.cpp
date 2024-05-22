@@ -34,10 +34,10 @@ double stackConeSegments(Volume &vol, xml_comp_t x_comp, const Material &mat)
         vol.setSolid(conesegs[0]);
     } else {
         UnionSolid segs_union(conesegs[0], conesegs[1], Position(0., 0., (lengths[0] + lengths[1])/2.));
-        double mid_length = lengths[1];
+        double mid_length = 0.;
         for (size_t i = 2; i < conesegs.size(); ++i) {
+            mid_length += lengths[i - 1];
             segs_union = UnionSolid(segs_union, conesegs[i], Position(0., 0., (lengths[0] + lengths[i])/2. + mid_length));
-            mid_length += lengths[i];
         }
         vol.setSolid(segs_union);
     }

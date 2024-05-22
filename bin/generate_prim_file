@@ -29,7 +29,7 @@ def readline_nonblocking(output):
 parser = argparse.ArgumentParser()
 
 parser.add_argument('-c', '--compact-file', type=str, dest='compact',
-        default=os.path.join(os.environ.get('DETECTOR_PATH', '.'), 'solid_sidis.xml'),
+        default='solid.xml',
         help='Top level compact file for detectors')
 
 parser.add_argument('-s', '--skip', type=int,
@@ -73,10 +73,10 @@ macro = os.path.abspath(macro)
 
 # adjust fiber radius to reduce the number of fibers
 compact_dir = os.path.dirname(os.path.realpath(args.compact))
-ci_ecal = os.path.join(compact_dir, 'compact', 'ci_ecal_scfi.xml')
-os.system('sed -i \'s/radius=\"EcalEndcapP_FiberRadius\"/radius=\"EcalEndcapP_FiberRadius*10\"/\' {}'.format(ci_ecal))
 
-prim_file = 'g4_0000.prim'
+# determined by geant4, we have no control over this
+prim_file = 'g4_0000'
+
 dawn_env = os.environ.copy()
 dawn_env['DAWN_BATCH'] = 'a'
 # sdir = os.path.dirname(os.path.realpath(__file__))
@@ -117,7 +117,7 @@ while elapse.seconds < args.timeout:
         decoded_line = line.decode('utf-8').strip()
         print('{} {}'.format(time_str, decoded_line))
         # what we are looking for
-        if decoded_line == 'File  {}  is generated.'.format(prim_file):
+        if decoded_line == 'File  {}.prim  is generated.'.format(prim_file):
             print('{} === FINISHED ===: Got the prim file, terminating.'.format(time_str))
             finished = True
             break
@@ -144,7 +144,6 @@ for proc in psutil.process_iter():
         os.kill(pinfo['pid'], signal.SIGTERM)
 
 # revert the change
-os.system('sed -i \'s/radius=\"EcalEndcapP_FiberRadius*10\"/radius=\"EcalEndcapP_FiberRadius\"/\' {}'.format(ci_ecal))
 
 line = b'stderr outputs:\n'
 while line:
@@ -159,6 +158,7 @@ else:
 
 # move the prim files (which can be quite large)
 # to the local pipeline storage path
-os.system('mv g4_0000.prim {}/{}.prim'.format(args.out_dir,args.file_tag))
+os.system('mv {}.prim {}/{}.prim'.format(prim_file, args.out_dir, args.file_tag))
+os.system('mv {}.eps {}/{}.eps'.format(prim_file, args.out_dir, args.file_tag))
 
 

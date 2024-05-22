@@ -52,7 +52,7 @@
   <constant name="LGC_seg4_rmin2"  value="73.2*cm" />
   <constant name="LGC_seg4_rmax2"  value="263.*cm" />
 
-  <constant name="LGC_wall"     value="4*mm" />
+  <constant name="LGC_wall"     value="6*mm" />
   <constant name="LGC_entrance" value="4*mm" />
   <constant name="LGC_exit"     value="4*mm" />
 
