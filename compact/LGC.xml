@@ -190,7 +190,7 @@
     <rotation x="65*degree" y="0" z="0" />
     <comment> TODO: implement PMT material layers </comment>
     <pmt_array dx="16*cm" dy="16*cm" sensitive="yes" vis="LGCPMTVis" />
-    <cone thickness="4*mm" rmin="7.0*cm" rmax="21.5*cm" length="30.*cm" vis="LGCConeVis" />
+    <cone shape="cone" thickness="4*mm" rmin="7.0*cm" rmax="21.5*cm" length="30.*cm" vis="LGCConeVis" />
     <shield material="Lead" thickness="1.*cm" radius="11.53*cm" length="8.*cm"
       shift_z="1.5*cm" vis="LGCShieldVis" />
   </winston_cone>

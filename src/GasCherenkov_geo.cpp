@@ -8,7 +8,7 @@
 #include "DDRec/Surface.h"
 
 #include <XML/Helper.h>
-#include "TMath.h"
+#include <fmt/core.h>
 
 using namespace dd4hep;
 using namespace dd4hep::rec;
@@ -181,12 +181,24 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     double    cone_length       = x_cone.length();
     double    cone_radius1      = x_cone.rmin();
     double    cone_radius2      = x_cone.rmax();
+    auto      cone_shape        = x_cone.attr<std::string>(_Unicode(shape));
 
+    Volume    v_winston_cone("v_winston_cone");
+    if (cone_shape == "paraboloid") {
+        Paraboloid       winston_cone1(cone_radius1 + cone_thickness, cone_radius2 + cone_thickness, cone_length / 2.0 );
+        Paraboloid       winston_cone2(cone_radius1, cone_radius2, cone_length / 2.0 + 0.1*mm );
+        SubtractionSolid winston_cone_solid(winston_cone1, winston_cone2);
+        v_winston_cone.setSolid(winston_cone_solid);
+    } else if (cone_shape == "cone") {
+        Cone winston_cone_solid(cone_length/2., cone_radius1, cone_radius1 + cone_thickness, cone_radius2, cone_radius2 + cone_thickness);
+        v_winston_cone.setSolid(winston_cone_solid);
+    } else {
+        printout(ERROR, "SoLID_GasCherenkov",
+                 fmt::format("Unknown shape {} for the winston cone, please use (Paraboloid, Cone).", cone_shape));
+        throw std::runtime_error("Failed to build winston cone solid for SoLID_GasCherenkov");
+    }
+    v_winston_cone.setMaterial(winston_mat);
     DetElement       de_winston_cone(det, "de_winston_cone", 1);
-    Paraboloid       winston_cone1(cone_radius1 + cone_thickness, cone_radius2 + cone_thickness, cone_length / 2.0 );
-    Paraboloid       winston_cone2(cone_radius1, cone_radius2, cone_length / 2.0 + 0.1*mm );
-    SubtractionSolid winston_cone_solid(winston_cone1, winston_cone2);
-    Volume           v_winston_cone("v_winston_cone", winston_cone_solid, winston_mat);
     PlacedVolume     pv_winston_cone = winston_assem.placeVolume(v_winston_cone, Position(0., 0., (cone_length + pmt_dz)/2.));
     de_winston_cone.setPlacement(pv_winston_cone);
     v_winston_cone.setVisAttributes(desc, x_cone.attr<std::string>(_Unicode(vis)));
