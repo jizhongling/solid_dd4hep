@@ -5,9 +5,9 @@ Based on M. Frank and F. Gaede runSim.py
 Modified with settings for SoLID simulation
 
 [simulation]:
-    python scripts/subsystems/lgc_sim.py --compactFile solid.xml --runType batch
+    python scripts/LGC/sim.py --compactFile solid.xml --runType batch
 [visualization]:
-    python scripts/subsystems/lgc_sim.py --compactFile solid.xml --runType qt --macro macro/vis.mac
+    python scripts/LGC/sim.py --compactFile solid.xml --runType qt --macro macro/vis.mac
 """
 from __future__ import absolute_import, unicode_literals
 import logging
@@ -65,13 +65,13 @@ if __name__ == "__main__":
     SIM.part.userParticleHandler = ""
 
     # Particle gun settings: electrons with fixed energy and theta, varying phi
-    SIM.numberOfEvents = 100
+    SIM.numberOfEvents = 100000
     SIM.enableGun = True
     SIM.gun.position = (0., 0., "-300*cm")
     SIM.gun.energy = "5*GeV"
     SIM.gun.particle = "e-"
-    SIM.gun.thetaMin = "12.0*deg"
-    SIM.gun.thetaMax = "12.1*deg"
+    SIM.gun.thetaMin = "8.0*deg"
+    SIM.gun.thetaMax = "16.0*deg"
     SIM.gun.distribution = "cos(theta)"
 
     # Output file (assuming CWD)
