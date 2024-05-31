@@ -5,9 +5,9 @@ Based on M. Frank and F. Gaede runSim.py
 Modified with settings for SoLID simulation
 
 [simulation]:
-    python benchmarks/LGC/sim.py --compactFile solid.xml --runType batch
+    python benchmarks/LGC/sim_optics.py --compactFile solid.xml --runType batch
 [visualization]:
-    python benchmarks/LGC/sim.py --compactFile solid.xml --runType qt --macro macro/vis.mac
+    python benchmarks/LGC/sim_optics.py --compactFile solid.xml --runType qt --macro macro/vis.mac
 """
 from __future__ import absolute_import, unicode_literals
 import logging
