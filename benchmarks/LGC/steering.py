@@ -1,5 +1,6 @@
 """
 A steering file that enables optical photon counting for LGC
+It sets up physics lists and particle filters for LGC, as well as setting a particle gun for SoLID configuration
    @author  C.Peng
 
 [simulation]:
