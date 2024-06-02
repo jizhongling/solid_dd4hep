@@ -136,7 +136,7 @@ if __name__ == '__main__':
     qe_counts = ak.to_numpy(ak.sum(ak.unflatten(oph_qe, ak.num(lgc_hits['LightGasCherenkovHits.EDep'])), axis=-1))
 
     # plots
-    bins_npe = np.linspace(0, 120, 121)
+    bins_npe = np.linspace(1, 120, 120)
     bins_theta = np.linspace(5, 20, 91)
 
     # quantum efficiency curve
