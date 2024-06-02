@@ -63,6 +63,8 @@ SIM.gun.energy = "5*GeV"
 SIM.gun.particle = "e-"
 SIM.gun.thetaMin = "8.0*deg"
 SIM.gun.thetaMax = "16.0*deg"
+SIM.gun.phiMin = "0.*deg"
+SIM.gun.phiMax = "360.*deg"
 SIM.gun.distribution = "cos(theta)"
 
 # Output file (assuming CWD)
