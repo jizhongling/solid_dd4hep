@@ -98,13 +98,36 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--entry-start', type=int,
                         default=-1,
                         help='event number to start')
-    parser.add_argument('--vmax', type=float,
+    parser.add_argument('--color-map', type=str,
+                        default='viridis',
+                        help='color map name in matplotlib')
+    parser.add_argument('--vmax-theta', type=float,
                         default=None,
-                        help='max value for 2d histogram')
-    parser.add_argument('--vmin', type=float,
+                        help='max value for 2d histogram with theta')
+    parser.add_argument('--vmin-theta', type=float,
                         default=None,
-                        help='min value for 2d histogram')
+                        help='min value for 2d histogram with theta')
+    parser.add_argument('--vmax-phi', type=float,
+                        default=None,
+                        help='max value for 2d histogram with phi')
+    parser.add_argument('--vmin-phi', type=float,
+                        default=None,
+                        help='min value for 2d histogram with phi')
+    parser.add_argument('--bins-photon', type=str,
+                        default="1,120,120",
+                        help='optical photon bins in the format of \"<min>,<max>,<nbins>\"')
+    parser.add_argument('--bins-theta', type=str,
+                        default="5,20,151",
+                        help='theta bins in the format of \"<min>,<max>,<nbins>\"')
+    parser.add_argument('--bins-phi', type=str,
+                        default="-180,180,361",
+                        help='phi bins in the format of \"<min>,<max>,<nbins>\"')
+
     args = parser.parse_args()
+
+    bins_npe = np.linspace(*eval(args.bins_photon))
+    bins_theta = np.linspace(*eval(args.bins_theta))
+    bins_phi = np.linspace(*eval(args.bins_phi))
 
     # determine event range
     entry_start = None
@@ -136,8 +159,7 @@ if __name__ == '__main__':
     qe_counts = ak.to_numpy(ak.sum(ak.unflatten(oph_qe, ak.num(lgc_hits['LightGasCherenkovHits.EDep'])), axis=-1))
 
     # plots
-    bins_npe = np.linspace(1, 120, 120)
-    bins_theta = np.linspace(5, 20, 91)
+    cmap = mpl.colormaps[args.color_map]
 
     # quantum efficiency curve
     fig, ax = plt.subplots(figsize=(8, 6), dpi=160)
@@ -154,15 +176,16 @@ if __name__ == '__main__':
     secax.set_xlabel('Wavelength [nm]')
     fig.savefig(os.path.join(args.output_dir, 'oph_quantum_efficiency.png'))
 
+    # 1D distribution of optical photon counts
     fig, ax = plt.subplots(figsize=(8, 6), dpi=160)
     ax.hist(qe_counts, bins=bins_npe, ec='k')
     ax.set_ylabel('Event Counts')
     ax.set_xlabel('Number of Optical Photons Detected')
     fig.savefig(os.path.join(args.output_dir, 'oph_counts.png'))
 
-    cmap = mpl.colormaps['viridis']
+    # 2D distribution of optical photon counts vs. theta angle
     fig, ax = plt.subplots(figsize=(8, 6), dpi=160, gridspec_kw=dict(right=0.98))
-    h = ax.hist2d(theta/np.pi*180., qe_counts, bins=(bins_theta, bins_npe), cmap=cmap, vmin=args.vmin, vmax=args.vmax)
+    h = ax.hist2d(theta/np.pi*180., qe_counts, bins=(bins_theta, bins_npe), cmap=cmap, vmin=args.vmin_theta, vmax=args.vmax_theta)
     cbar = fig.colorbar(h[3], ax=ax, pad=0.01)
     cbar.ax.set_ylabel('Event Counts')
     # ax.set_facecolor(cmap(0))
@@ -171,4 +194,17 @@ if __name__ == '__main__':
     ax.set_xlabel('Incident Particle Polar Angle ($^{\circ}$)')
     ax.set_ylabel('Number of Optical Photons Detected')
     fig.savefig(os.path.join(args.output_dir, 'oph_counts_theta.png'))
+
+    # 2D distribution of optical photon counts vs. phi angle
+    fig, ax = plt.subplots(figsize=(8, 6), dpi=160, gridspec_kw=dict(right=0.98))
+    h = ax.hist2d(phi/np.pi*180., qe_counts, bins=(bins_phi, bins_npe), cmap=cmap, vmin=args.vmin_phi, vmax=args.vmax_phi)
+    cbar = fig.colorbar(h[3], ax=ax, pad=0.01)
+    cbar.ax.set_ylabel('Event Counts')
+    # ax.set_facecolor(cmap(0))
+    # ax.set_axisbelow(True)
+    ax.grid(ls=(0, (5, 15)), color='w', lw=0.5)
+    ax.set_xlabel('Incident Particle Azimuthal Angle ($^{\circ}$)')
+    ax.set_ylabel('Number of Optical Photons Detected')
+    fig.savefig(os.path.join(args.output_dir, 'oph_counts_phi.png'))
+
 
