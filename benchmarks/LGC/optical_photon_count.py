@@ -207,4 +207,3 @@ if __name__ == '__main__':
     ax.set_ylabel('Number of Optical Photons Detected')
     fig.savefig(os.path.join(args.output_dir, 'oph_counts_phi.png'))
 
-

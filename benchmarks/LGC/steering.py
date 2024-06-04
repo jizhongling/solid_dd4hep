@@ -12,11 +12,10 @@ from __future__ import absolute_import, unicode_literals
 import logging
 import sys
 import os
-
 from DDSim.DD4hepSimulation import DD4hepSimulation
 
-
 SIM = DD4hepSimulation()
+
 
 # Ensure that Cerenkov and optical physics are always loaded
 def setupCerenkov(kernel):
@@ -36,6 +35,7 @@ def setupCerenkov(kernel):
     ph.enableUI()
     seq.adopt(ph)
     return None
+
 
 SIM.physics.setupUserPhysics(setupCerenkov)
 
@@ -58,7 +58,7 @@ SIM.part.userParticleHandler = ""
 # Particle gun settings: electrons with fixed energy and theta, varying phi
 SIM.numberOfEvents = 100
 SIM.enableGun = True
-SIM.gun.position = (0., 0., "-300*cm")
+SIM.gun.position = (0., 0., "-350*cm")
 SIM.gun.energy = "5*GeV"
 SIM.gun.particle = "e-"
 SIM.gun.thetaMin = "5.0*deg"
