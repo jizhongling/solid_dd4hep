@@ -76,7 +76,7 @@
     wedge corner coordinates
   </comment>
   <constant name="LGC_inner_wedge_P2_x" value="18.23*cm"/>
-  <constant name="LGC_inner_wedge_P2_y" value="173.42*cm"/>
+  <constant name="LGC_inner_wedge_P2_y" value="173.43*cm"/>
   <constant name="LGC_inner_wedge_P2_z" value="305.82*cm"/>
 
   <constant name="LGC_inner_wedge_P4_x" value="7.57*cm"/>
@@ -121,7 +121,7 @@
   name="LightGasCherenkov"
   type="SoLID_GasCherenkov"
   readout="LightGasCherenkovHits"
-  numsides="24">
+  numsides="30">
   <placement x="LGC_x" y="LGC_y" z0="LGC_z" />
 
   <tank material="Kapton" vis="LGCTankVis">
@@ -165,20 +165,22 @@
     <piece id="1" material="PyrexGlassOptical" surface="MirrorOpticalSurface" vis="LGCMirrorVis">
       <placement x="LGC_inner_shell_x" y="LGC_inner_shell_y" z="LGC_inner_shell_z - LGC_z"/>
       <shell rmin="LGC_inner_shell_rmin" rmax="LGC_inner_shell_rmax"
-        theta0="0" dtheta="90*degree" phi0="0" dphi="360*degree"/>
+        theta0="0*degree" dtheta="90*degree" phi0="180*degree" dphi="180*degree"/>
+      <comment> dz, dy are swapped because of x rotation </comment>
       <wedge dx1="LGC_inner_wedge_dx1" dx2="LGC_inner_wedge_dx2"
-        dy="LGC_inner_wedge_dy" dz="LGC_inner_wedge_dz"
+        dy="LGC_inner_wedge_dz" dz="LGC_inner_wedge_dy"
         x="LGC_inner_wedge_x" y="LGC_inner_wedge_y" z="LGC_inner_wedge_z"
-        rotx="90*degree" roty="0" rotz="0"/>
+        rotx="-90*degree" roty="0" rotz="0"/>
     </piece>
     <piece id="2" material="PyrexGlassOptical" surface="MirrorOpticalSurface" vis="LGCMirrorVis">
       <placement x="LGC_outer_shell_x" y="LGC_outer_shell_y" z="LGC_outer_shell_z - LGC_z"/>
       <shell rmin="LGC_outer_shell_rmin" rmax="LGC_outer_shell_rmax"
-        theta0="0" dtheta="90*degree" phi0="0" dphi="360*degree"/>
+        theta0="0*degree" dtheta="60*degree" phi0="0*degree" dphi="360*degree"/>
+      <comment> dz, dy are swapped because of x rotation </comment>
       <wedge dx1="LGC_outer_wedge_dx1" dx2="LGC_outer_wedge_dx2"
-        dy="LGC_outer_wedge_dy" dz="LGC_outer_wedge_dz"
+        dy="LGC_outer_wedge_dz" dz="LGC_outer_wedge_dy"
         x="LGC_outer_wedge_x" y="LGC_outer_wedge_y" z="LGC_outer_wedge_z"
-        rotx="90*degree" roty="0" rotz="0"/>
+        rotx="-90*degree" roty="0" rotz="0"/>
     </piece>
   </mirrors>
 

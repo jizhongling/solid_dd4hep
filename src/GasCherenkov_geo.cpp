@@ -117,15 +117,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         xml_dim_t x_msph = x_mir.child(_Unicode(shell));
         // front half, this is to help debugging visualization
         Sphere mshell(x_msph.rmin(), x_msph.rmax(),
-            x_msph.attr<double>(_Unicode(theta0)), x_msph.attr<double>(_Unicode(dtheta)),
-            x_msph.attr<double>(_Unicode(phi0)), x_msph.attr<double>(_Unicode(dphi)));
+                      x_msph.attr<double>(_Unicode(theta0)), x_msph.attr<double>(_Unicode(theta0)) + x_msph.attr<double>(_Unicode(dtheta)),
+                      x_msph.attr<double>(_Unicode(phi0)), x_msph.attr<double>(_Unicode(phi0)) + x_msph.attr<double>(_Unicode(dphi)));
         // build trapezoid
         xml_dim_t x_mtrd = x_mir.child(_Unicode(wedge));
         Trd1 mwedge(x_mtrd.attr<double>(_Unicode(dx1)), x_mtrd.attr<double>(_Unicode(dx2)), x_mtrd.dy(), x_mtrd.dz());
         auto mwedge_trans = Transform3D(Position(x_mtrd.x(), x_mtrd.y(), x_mtrd.z()))\
                           * RotationZYX(x_mtrd.attr<double>(_Unicode(rotz)),
                                         x_mtrd.attr<double>(_Unicode(roty)),
-                                        x_mtrd.attr<double>(_Unicode(rotz)));
+                                        x_mtrd.attr<double>(_Unicode(rotx)));
 
         // mirror volume
         // use union to debug if intersection does not exist
