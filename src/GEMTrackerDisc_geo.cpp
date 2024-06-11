@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2024 Chao Peng, Whitney Armstrong
+
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 #include "TMath.h"
@@ -79,4 +82,4 @@ static Ref_t create_detector(Detector& lcdd, xml_h e, SensitiveDetector sens)
   return sdet;
 }
 
-DECLARE_DETELEMENT(GEMTrackerDiscSOLID,create_detector)
+DECLARE_DETELEMENT(SoLID_GEMTrackerDisc, create_detector)
