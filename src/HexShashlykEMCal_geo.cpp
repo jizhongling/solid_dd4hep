@@ -196,5 +196,5 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     return sdet;
 }
 
-DECLARE_DETELEMENT(EMCalorimeterSoLID, createDetector)
+DECLARE_DETELEMENT(SoLID_HexShashlykEMCal, createDetector)
 

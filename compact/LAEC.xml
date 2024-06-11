@@ -4,7 +4,7 @@
 </define>
 
 <detectors>
-<detector id="3" name="LAECPreShower" type="EMCalorimeterSoLID" readout="LAEC_PrShHits" vis="PurpleVis" >
+<detector id="3" name="LAECPreShower" type="SoLID_HexShashlykEMCal" readout="LAEC_PrShHits" vis="PurpleVis" >
   <comment>Large Angle Electromagnetic Calorimeter (LAEC) Preshower for SIDIS</comment>
   <dimensions rmin="83*cm" rmax="140*cm" z0="-65*cm" rmod="6.25*cm" rtol="1.0*cm" />
   <layer repeat="1" vis="InvisibleWithDaughters">
@@ -13,7 +13,7 @@
   </layer>
 </detector>
 
-<detector id="4" name="LAECShower" type="EMCalorimeterSoLID" readout="LAEC_ShHits" vis="PurpleVis" >
+<detector id="4" name="LAECShower" type="SoLID_HexShashlykEMCal" readout="LAEC_ShHits" vis="PurpleVis" >
   <comment>Large Angle Electromagnetic Calorimeter (LAEC) Shower for SIDIS</comment>
   <dimensions rmin="83*cm" rmax="140*cm" z0="-57*cm" rmod="6.25*cm" rtol="1.0*cm" />
   <layer repeat="194" vis="GreenVis">

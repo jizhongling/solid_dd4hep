@@ -61,8 +61,8 @@
       <!--<include ref="compact/fields.xml"/>-->
 
   <detectors>
-    <!--<include ref="compact/LAEC.xml"/>
-    <include ref="compact/FAEC.xml"/>-->
+    <include ref="compact/LAEC.xml"/>
+    <include ref="compact/FAEC.xml"/>
     <include ref="compact/LGC.xml"/>
     <include ref="compact/GEM_sidis.xml"/>
   </detectors>
