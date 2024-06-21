@@ -1,6 +1,6 @@
 <lccdd>
   <detectors>
-    <detector id="2" name="GEMTracker_SIDIS" vis="RedVis" type="SoLID_GEMTrackerDisc" readout="GEMTrackerHits" >
+    <detector id="2" name="GEMTracker_SIDIS" vis="GEM_TrackerDiscVis" type="SoLID_GEMTrackerDisc" readout="GEMTrackerHits" >
       <module name="Module_A" id="1" inner_r="50.0*cm"  outer_r="118.0*cm" segments="30">
         <slice name="drift_cathode" material="Kapton" thickness="0.100*mm"/>
         <slice name="drift_gas1" material="GEMGas" thickness="3.0*mm"/>

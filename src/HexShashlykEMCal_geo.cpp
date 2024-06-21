@@ -138,7 +138,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                 if (x_slice.isSensitive()) {
                     s_vol.setSensitiveDetector(sens);
                 }
-                slice.setAttributes(desc, s_vol, x_slice.regionStr(), x_slice.limitsStr(), "InvisibleNoDaughters");
+                slice.setAttributes(desc, s_vol, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
                 // s_vol.setVisAttributes(desc.invisible());
 
                 // Slice placement.

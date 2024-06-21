@@ -61,9 +61,10 @@
       <!--<include ref="compact/fields.xml"/>-->
 
   <detectors>
-    <include ref="compact/LAEC.xml"/>
     <include ref="compact/FAEC.xml"/>
     <include ref="compact/LGC.xml"/>
+    <include ref="compact/HGC.xml"/>
+    <include ref="compact/LAEC.xml"/>
     <include ref="compact/GEM_sidis.xml"/>
   </detectors>
 
@@ -92,10 +93,6 @@
       <segmentation type="StereoStrip" strip_angle="15.0*degree" strip_size="0.5*mm" />
       <id>system:6,layer:5,module:16,slice:5,u:32:-32</id>
       -->
-  </readout>
-    <readout name="HeavyGasCherenkovHits">
-      <segmentation type="CartesianGridXY" grid_size_x="3*mm" grid_size_y="3*mm" />
-      <id>system:6,sector:11,mirror:4,module:10,x:32:-16,y:-16</id>
     </readout>
   </readouts>
 </lccdd>

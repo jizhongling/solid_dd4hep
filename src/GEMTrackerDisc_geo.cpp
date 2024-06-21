@@ -47,6 +47,7 @@ static Ref_t create_detector(Detector& lcdd, xml_h e, SensitiveDetector sens)
 
     Tube    gem_layer(inner_r, outer_r, thickness/2.0);
     Volume  gem_layer_vol("gem_layer_vol", gem_layer, carbon);
+    gem_layer_vol.setVisAttributes(lcdd, x_det.visStr());
 
 
     // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
@@ -61,7 +62,7 @@ static Ref_t create_detector(Detector& lcdd, xml_h e, SensitiveDetector sens)
 
     gem_layer_vol.setSensitiveDetector(sens);
 
-    DetElement layer_DE( sdet, _toString(layer_id,"layer%d"), layer_id );
+    DetElement layer_DE(sdet, _toString(layer_id,"layer%d"), layer_id);
 
     //Assembly   layer_assembly( layer_name+"_assembly" );
     pv = assembly.placeVolume( gem_layer_vol, Transform3D(RotationZ(phi0_offset),Position(0.0,0.0,z)) );
@@ -71,7 +72,7 @@ static Ref_t create_detector(Detector& lcdd, xml_h e, SensitiveDetector sens)
 
   }
 
-  sdet.setAttributes(lcdd, assembly,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+  sdet.setAttributes(lcdd, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   //assembly.setVisAttributes(lcdd.invisible());
 
   pv = lcdd.pickMotherVolume(sdet).placeVolume(assembly);

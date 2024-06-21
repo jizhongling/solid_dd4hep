@@ -67,7 +67,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // Main tank
     // build from stacking conesegments
     auto x_tank = x_det.child(_Unicode(tank)); 
-    Volume v_tank("v_tank");
+    Volume v_tank("v_" + det_name + "_tank");
     // using tank center (z) as the center point for all following volumes
     double shift_z = stackConeSegments(v_tank, x_tank, desc.material(x_tank.attr<std::string>(_Unicode(material))));
     v_tank.setVisAttributes(desc, x_tank.attr<std::string>(_Unicode(vis)));
