@@ -1,8 +1,5 @@
-//==========================================================================
-//  SoLID Electromagnetic Calorimeter Implementation
-//--------------------------------------------------------------------------
-// Author     : C. Peng
-//==========================================================================
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2024 Chao Peng
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
