@@ -1,15 +1,4 @@
 #! /usr/local/bin/python3
-'''
-    A python script to facilitate the ML benchmarks for e/pi separation with the imaging calorimeter (single particles).
-    This process follows the steps below:
-    1. Simulation to generate training samples
-    2. Study and apply E/p cut to reduce the training samples
-    3. Train and test ML models with the "cleaned" (after E/p cut) samples
-    4. Benchmark the performance
-
-    Author: Chao Peng (ANL)
-    Date: 11/11/2022
-'''
 import os
 import sys
 import json
@@ -20,12 +9,10 @@ import argparse
 SDIR = os.path.dirname(os.path.realpath(__file__))
 # {var} is from args
 FILE_NAMES = dict(
-    gen_script = os.path.join(SDIR, 'scripts', 'gen_particles.py'),
     rec_script = os.path.join(SDIR, 'options', 'faec.py'),
 
     sim_dir = os.path.join('{outdir}', '{run_type}', 'sim_data'),
 
-    gen_file = os.path.join('{outdir}', '{run_type}', 'sim_data', '{ntag}_gen.hepmc'),
     sim_file = os.path.join('{outdir}', '{run_type}', 'sim_data', '{ntag}_sim.edm4hep.root'),
     rec_file = os.path.join('{outdir}', '{run_type}', 'sim_data', '{ntag}_rec.root'),
 )
@@ -42,27 +29,15 @@ SCRIPT_STEPS = (
 
 # simulation and reconstruction
 def gen_sim_rec(**kwargs):
-    # generate particles
-    gen_cmd = [
-        'python {gen_script} {gen_file}',
-        '-n {nev}',
-        '-s {seed}',
-        '--angmin {angmin} --angmax {angmax}',
-        '--pmin {pmin} --pmax {pmax}',
-        '--particles {particles}',
-        ]
-    gen_cmd = ' '.join(gen_cmd).format(**kwargs).split(' ')
-    subprocess.run(gen_cmd)
-
     # simulation
     sim_cmd = [
-        'ddsim --runType batch --part.minimalKineticEnergy 1*TeV --filter.tracker edep0',
-        '-v WARNING',
-        '--numberOfEvents {nev}',
+        'ddsim --runType batch -v WARNING',
         # '--physics.list {physics_list}',
-        '--inputFiles {gen_file}',
         '--outputFile {sim_file}',
         '--compact {compact}',
+        '-G -N {nev}',
+        '--gun.thetaMin {angmin}*deg --gun.thetaMax {angmax}*deg --gun.distribution cos(theta)',
+        '--gun.momentumMin {pmin}*GeV --gun.momentumMax {pmax}*GeV --gun.particle {particle}',
         ]
     if 'seed' in kwargs and kwargs['seed'] > 0:
         sim_cmd += ['--random.seed {seed}']
@@ -168,9 +143,9 @@ if __name__ == '__main__':
             help='maximum scattering angle of particles.'
             )
     parser.add_argument(
-            '--particles', type=str,
-            default='electron',
-            help='partcile names, separated by \",\".'
+            '--particle', type=str,
+            default='e-',
+            help='partcile name.'
             )
     parser.add_argument(
             '--steps', type=str,

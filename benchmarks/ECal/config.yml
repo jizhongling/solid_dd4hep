@@ -1,39 +1,6 @@
-ml_shower:tagging_epi :
+ecal_test :
   extends: .rec_benchmark
   when: manual
   stage: benchmarks1
   script:
-    - python3 ECal/run_benchmark.py -t imcal_epi --particles "electron,pion-,pion-" -n 10000
-
-ml_shower:tagging_e :
-  extends: .rec_benchmark
-  when: manual
-  stage: benchmarks1
-  script:
-    - python3 ECal/run_benchmark.py -t imcal_e -n 100000 --particles "electron" --pmin 0.5 --pmax 10
-
-ml_shower:tagging_pi :
-  extends: .rec_benchmark
-  when: manual
-  stage: benchmarks1
-  script:
-    - python3 ECal/run_benchmark.py -t imcal_pi -n 100000 --particles "pion-" --pmin 0.5 --pmax 10
-
-ml_shower:training:
-  extends: .rec_benchmark
-  when: manual
-  stage: process
-  needs: ["ml_shower:tagging_epi", "ml_shower:tagging_e", "ml_shower:tagging_pi"]
-  script:
-    - ls -lrth
-    # TODO
-
-ml_shower:test:
-  extends: .rec_benchmark
-  when: manual
-  stage: collect
-  needs: ["ml_shower:training"]
-  script:
-    - ls -lrth
-    # TODO
-
+    - python3 ECal/run_benchmark.py -c ../solid.xml -t ecal_test -n 10000 --particle "e-" --p-min 3 --p-max 3 --angle-min 15 --angle-max 15
