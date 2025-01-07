@@ -3,4 +3,4 @@ ecal_test :
   when: manual
   stage: benchmarks1
   script:
-    - python3 ECal/run_benchmark.py -c ../solid.xml -t ecal_test -n 10000 --particle "e-" --p-min 3 --p-max 3 --angle-min 15 --angle-max 15
+    - python3 ECal/run_benchmark.py -c ../solid.xml -t ecal_test -n 10000 --particle "e-" --p-min 5 --p-max 5 --angle-min 10 --angle-max 10

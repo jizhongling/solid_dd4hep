@@ -36,18 +36,20 @@ def gen_sim_rec(**kwargs):
         '--outputFile {sim_file}',
         '--compact {compact}',
         '-G -N {nev}',
+        '--gun.position {position}',
         '--gun.thetaMin {angmin}*deg --gun.thetaMax {angmax}*deg --gun.distribution cos(theta)',
         '--gun.momentumMin {pmin}*GeV --gun.momentumMax {pmax}*GeV --gun.particle {particle}',
         ]
     if 'seed' in kwargs and kwargs['seed'] > 0:
         sim_cmd += ['--random.seed {seed}']
     sim_cmd = ' '.join(sim_cmd).format(**kwargs).split(' ')
+    print(' '.join(sim_cmd))
     return_code = subprocess.run(sim_cmd).returncode
     print(return_code)
     if return_code is not None and return_code < 0:
         print("ERROR running simulation!")
         exit(return_code)
-    subprocess.run(['rootls', '-t', kwargs['sim_file']])
+    # subprocess.run(['rootls', '-t', kwargs['sim_file']])
 
     # reconstruction with juggler
     # export to environment variables (used to pass arguments to the option file)
@@ -69,7 +71,6 @@ def gen_sim_rec(**kwargs):
         print("ERROR running juggler (reconstruction)!")
         exit(return_code)
     process = subprocess.run(['rootls', '-t', kwargs['rec_file']])
-
 
 
 if __name__ == '__main__':
@@ -113,10 +114,10 @@ if __name__ == '__main__':
             help='random seed to child scripts (only pass it if > 0).'
             )
     parser.add_argument(
-            '--batch-size', type=int,
-            dest='batch',
-            default=100000,
-            help='batch size to process data.'
+            '--position', type=str,
+            dest='position',
+            default='0,0,-350*cm',
+            help='starting point of the incident particle, three numbers seperated by \",\"',
             )
     parser.add_argument(
             '--p-min', type=float,
