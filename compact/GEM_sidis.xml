@@ -38,7 +38,7 @@
         <module_component name="gem_foil_3" material="Kapton" thickness="0.100*mm" vis="GEM_TrackerDiscVis"/>
         <module_component name="drift_gas4" material="GEMGas" thickness="2.0*mm" vis="GEM_TrackerDiscVis"/>
         <module_component name="u_readout_plane" material="Kapton" thickness="0.200*mm" sensitive="true" vis="GEM_TrackerDiscVis"/>
-        <module_component name="v_readout_plane" material="Kapton" thickness="0.200*mm" sensitive="true" vis="GEM_TrackerDiscVis"/>
+        <!--module_component name="v_readout_plane" material="Kapton" thickness="0.200*mm" sensitive="true" vis="GEM_TrackerDiscVis"/-->
       </module>
       <layer id="1" zstart="-175*cm" rmin="36*cm" rmax="87*cm" phi0="0*deg" nmodules="30" vis="GEM_TrackerLayerVis">
         <module name="Module1"/>
